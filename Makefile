@@ -13,10 +13,10 @@
 # limitations under the License.
 
 # The binary to build (just the basename).
-BIN := myapp
+BIN := third_rail
 
 # Where to push the docker image.
-REGISTRY ?= thockin
+REGISTRY ?= smartatransit
 
 # This version-strategy uses git tags to set the version string
 VERSION ?= $(shell git describe --tags --always --dirty)
