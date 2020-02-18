@@ -34,3 +34,8 @@ type directionsResponse struct {
 type directionsData struct {
 	Directions []string `json:"directions"`
 }
+
+type stationsLocationResponse struct {
+	Data []schemas.StationLocation `json:"data"`
+}
+
