@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/thoas/go-funk"
 	"io/ioutil"
-	"log"
 	"strings"
 )
 
@@ -82,7 +81,6 @@ func (mev MartaEntitiesValidator) GetEntities(entityType string) ([]string, erro
 }
 
 func findAlias(entities []AliasStore, value string) interface{} {
-	log.Printf("Looking for aliases of %s", value)
 	return funk.Find(entities, func(store AliasStore) bool {
 		return strings.ToUpper(store.Name) == strings.ToUpper(value) || funk.Contains(store.Aliases, value)
 	})

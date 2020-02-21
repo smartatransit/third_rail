@@ -8,13 +8,26 @@ import (
 	"strconv"
 )
 
-func GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {
+type StaticController struct {
+
+}
+
+func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	v := req.URL.Query()
+
+	schedule := v.Get("schedule")
+	stationName := v.Get("station_name")
+
+	if len(schedule) < 1 || len(stationName) < 1 {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		return
+	}
 
 	json.NewEncoder(w).Encode(response{})
 }
 
-func GetLines(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
 	lines, _ := mev.GetEntities(validators.MARTA_LINES)
@@ -24,7 +37,7 @@ func GetLines(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func GetDirections(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetDirections(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
 	directions, _ := mev.GetEntities(validators.MARTA_DIRECTIONS)
@@ -34,7 +47,7 @@ func GetDirections(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func GetStations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetStations(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
 	stations, _ := mev.GetEntities(validators.MARTA_STATIONS)
@@ -44,7 +57,7 @@ func GetStations(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func GetLocations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLocations(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()
 

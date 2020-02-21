@@ -8,18 +8,19 @@ import (
 	"github.com/smartatransit/third_rail/pkg/validators"
 	"log"
 	"net/http"
-	"os"
 )
 
-func GetScheduleByLine(w http.ResponseWriter, req *http.Request) {
+type LiveController struct {
+	MartaClient *gomarta.Client
+}
+
+func (controller LiveController) GetScheduleByLine(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(req)
 	line := params["line"]
 
-	martaClient := gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-
-	events, _ := martaClient.GetTrains()
+	events, _ := controller.MartaClient.GetTrains()
 	mev := validators.NewMartaEntitiesValidator()
 	eventTransformer := transformers.NewEventTransformer(mev)
 
@@ -34,7 +35,7 @@ func GetScheduleByLine(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-func GetScheduleByStation(w http.ResponseWriter, req *http.Request) {
+func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	params := mux.Vars(req)
@@ -42,9 +43,7 @@ func GetScheduleByStation(w http.ResponseWriter, req *http.Request) {
 
 	log.Printf("Displaying schedules for %s", station)
 
-	martaClient := gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-
-	events, _ := martaClient.GetTrains()
+	events, _ := controller.MartaClient.GetTrains()
 	mev := validators.NewMartaEntitiesValidator()
 	eventTransformer := transformers.NewEventTransformer(mev)
 
