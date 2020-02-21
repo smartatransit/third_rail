@@ -39,3 +39,11 @@ type stationsLocationResponse struct {
 	Data []schemas.StationLocation `json:"data"`
 }
 
+type parkingData struct {
+	Station schemas.Station `json:"station"`
+	Status string `json"status"`
+}
+
+type parkingResponse struct {
+	Data []parkingData `json:"data"`
+}
