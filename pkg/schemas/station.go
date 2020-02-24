@@ -7,7 +7,7 @@ type Station struct {
 }
 
 type StationLocation struct {
-	StationName string `json:"station_name"`
-	Location string `json:"location"`
-	Distance float64 `json:"distance"`
+	StationName string  `json:"station_name"`
+	Location    string  `json:"location"`
+	Distance    float64 `json:"distance"`
 }
