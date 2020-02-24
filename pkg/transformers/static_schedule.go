@@ -1,12 +1,12 @@
 package transformers
 
 import (
-	"github.com/smartatransit/third_rail/pkg/schemas"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"log"
 )
 
 type StaticScheduleTransformer struct {
-	Stations []schemas.StationLocation
+	Stations []marta_schemas.StationLocation
 }
 
 func NewStaticScheduleTransformer() StaticScheduleTransformer {
@@ -19,13 +19,13 @@ func NewStaticScheduleTransformer() StaticScheduleTransformer {
 	return StaticScheduleTransformer{parseStationData(stations)}
 }
 
-func (lt StaticScheduleTransformer) GetSchedule(schedule, stationName string) (sortedStationLocations []schemas.StationLocation) {
+func (lt StaticScheduleTransformer) GetSchedule(schedule, stationName string) (sortedStationLocations []marta_schemas.StationLocation) {
 	return
 }
 
-func parseScheduleData(stationData [][]string) (stationLocations []schemas.StationLocation) {
+func parseScheduleData(stationData [][]string) (stationLocations []marta_schemas.StationLocation) {
 	for i, _ := range stationData[0] {
-		station := schemas.StationLocation{
+		station := marta_schemas.StationLocation{
 			StationName: stationData[0][i],
 			Location:    stationData[1][i],
 			Distance:    0,

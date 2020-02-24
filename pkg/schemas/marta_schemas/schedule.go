@@ -1,4 +1,4 @@
-package schemas
+package marta_schemas
 
 type Schedule struct {
 	Destination    string `json:"destination"`

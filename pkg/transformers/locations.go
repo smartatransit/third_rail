@@ -2,14 +2,14 @@ package transformers
 
 import (
 	"github.com/mmcloughlin/geohash"
-	"github.com/smartatransit/third_rail/pkg/schemas"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"log"
 	"math"
 	"sort"
 )
 
 type LocationTransformer struct {
-	Stations []schemas.StationLocation
+	Stations []marta_schemas.StationLocation
 }
 
 func NewLocationTransformer() LocationTransformer {
@@ -22,7 +22,7 @@ func NewLocationTransformer() LocationTransformer {
 	return LocationTransformer{parseStationData(stations)}
 }
 
-func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []schemas.StationLocation) {
+func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []marta_schemas.StationLocation) {
 	for _, locationStation := range lt.Stations {
 		stationLat, stationLong := geohash.Decode(locationStation.Location)
 		locationStation.Distance = calculateDistance(latitude, longitude, stationLat, stationLong)
@@ -36,9 +36,9 @@ func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (
 	return
 }
 
-func parseStationData(stationData [][]string) (stationLocations []schemas.StationLocation) {
+func parseStationData(stationData [][]string) (stationLocations []marta_schemas.StationLocation) {
 	for i, _ := range stationData[0] {
-		station := schemas.StationLocation{
+		station := marta_schemas.StationLocation{
 			StationName: stationData[0][i],
 			Location:    stationData[1][i],
 			Distance:    0,

@@ -57,3 +57,14 @@ func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req
 
 	json.NewEncoder(w).Encode(resp)
 }
+
+func (controller LiveController) GetAlerts(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	alerts, _ := controller.MartaClient.GetAlerts()
+
+	var resp alertResponse
+	resp.Data = alerts
+
+	json.NewEncoder(w).Encode(resp)
+}
