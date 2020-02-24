@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/dghubble/go-twitter/twitter"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
@@ -14,8 +12,8 @@ import (
 	"net/http"
 )
 
-var martaClient *gomarta.Client
-var twitterClient *twitter.Client
+var martaClient clients.MartaClient
+var twitterClient clients.TwitterClient
 
 func main() {
 	err := godotenv.Load()
@@ -34,7 +32,7 @@ func main() {
 	mountAndServe(martaClient, twitterClient)
 }
 
-func mountAndServe(mc *gomarta.Client, tc *twitter.Client) {
+func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	router := mux.NewRouter()
 
 	liveController := controllers.LiveController{MartaClient: mc}

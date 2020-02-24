@@ -3,15 +3,15 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/transformers"
 	"github.com/smartatransit/third_rail/pkg/validators"
+	"github.com/smartatransit/third_rail/pkg/clients"
 	"log"
 	"net/http"
 )
 
 type LiveController struct {
-	MartaClient *gomarta.Client
+	MartaClient clients.MartaClient
 }
 
 func (controller LiveController) GetScheduleByLine(w http.ResponseWriter, req *http.Request) {

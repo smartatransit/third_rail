@@ -1,22 +1,56 @@
 package clients
 
 import (
+	"github.com/karlseguin/ccache"
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/smartatransit/gomarta"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 	"os"
+	"time"
 )
 
-type MartaClient interface{}
-type TwitterClient interface{}
-
-
-func GetMartaClient() *gomarta.Client {
-	return gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
+type MartaClient interface{
+	GetTrains() (gomarta.TrainAPIResponse, error)
 }
 
-func GetTwitterClient() *twitter.Client {
+type TwitterClient interface {
+	Search(string, *twitter.SearchTweetParams) (*twitter.Search, error)
+}
+
+type TwitterAPIClient struct {
+	client *twitter.Client
+	cache *ccache.Cache
+}
+
+type MartaAPIClient struct {
+	client *gomarta.Client
+	cache *ccache.Cache
+}
+
+func GetMartaClient() MartaAPIClient {
+	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
+	var marta = gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
+
+	return MartaAPIClient{ client:marta, cache:cache}
+}
+
+func (m MartaAPIClient) GetTrains() (gomarta.TrainAPIResponse, error) {
+
+	trains, err := m.cache.Fetch("trains", time.Second * 15, func() (interface{}, error) {
+		return m.client.GetTrains()
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return trains.Value().(gomarta.TrainAPIResponse), nil
+}
+
+func GetTwitterClient() TwitterAPIClient {
+	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
+
 	config := &clientcredentials.Config{
 		ClientID:     os.Getenv("TWITTER_CLIENT_ID"),
 		ClientSecret: os.Getenv("TWITTER_CLIENT_SECRET"),
@@ -27,5 +61,19 @@ func GetTwitterClient() *twitter.Client {
 
 	client := twitter.NewClient(httpClient)
 
-	return client
+	return TwitterAPIClient{client:client, cache:cache}
 }
+
+func (t TwitterAPIClient) Search(searchKey string, search *twitter.SearchTweetParams) (*twitter.Search, error) {
+	tweets, err := t.cache.Fetch(searchKey, time.Second * 15, func() (interface{}, error) {
+		result, _, err := t.client.Search.Tweets(search)
+		return result, err
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return tweets.Value().(*twitter.Search), nil
+}
+
