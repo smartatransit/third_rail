@@ -1,4 +1,4 @@
-package schemas
+package marta_schemas
 
 type Station struct {
 	Direction string `json:"direction"`

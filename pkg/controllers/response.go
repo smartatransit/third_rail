@@ -1,14 +1,16 @@
 package controllers
 
-import "github.com/smartatransit/third_rail/pkg/schemas"
+import (
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
+)
 
 type response struct {
 	Data []responseData `json:"data"`
 }
 
 type responseData struct {
-	Schedule schemas.Schedule `json:"schedule"`
-	Station  schemas.Station  `json:"station"`
+	Schedule marta_schemas.Schedule `json:"schedule"`
+	Station  marta_schemas.Station  `json:"station"`
 }
 
 type linesResponse struct {
@@ -36,14 +38,18 @@ type directionsData struct {
 }
 
 type stationsLocationResponse struct {
-	Data []schemas.StationLocation `json:"data"`
+	Data []marta_schemas.StationLocation `json:"data"`
 }
 
 type parkingData struct {
-	Station schemas.Station `json:"station"`
-	Status  string          `json:"status"`
+	Station marta_schemas.Station `json:"station"`
+	Status  string                `json:"status"`
 }
 
 type parkingResponse struct {
 	Data []parkingData `json:"data"`
+}
+
+type alertResponse struct {
+	Data marta_schemas.Alerts `json:"data"`
 }

@@ -6,6 +6,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/smartatransit/third_rail/pkg/clients"
+	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
+	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
 	"log"
@@ -22,11 +24,11 @@ func main() {
 	}
 
 	if martaClient == nil {
-		martaClient = clients.GetMartaClient()
+		martaClient = marta_client.GetMartaClient()
 	}
 
 	if twitterClient == nil {
-		twitterClient = clients.GetTwitterClient()
+		twitterClient = twitter_client.GetTwitterClient()
 	}
 
 	mountAndServe(martaClient, twitterClient)
@@ -39,6 +41,7 @@ func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	liveRouter := router.PathPrefix("/live").Subrouter()
 	liveRouter.HandleFunc("/schedule/line/{line}", liveController.GetScheduleByLine).Methods("GET")
 	liveRouter.HandleFunc("/schedule/station/{station}", liveController.GetScheduleByStation).Methods("GET")
+	liveRouter.HandleFunc("/alerts", liveController.GetAlerts).Methods("GET")
 
 	staticController := controllers.StaticController{}
 	staticRouter := router.PathPrefix("/static").Subrouter()
