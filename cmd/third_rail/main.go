@@ -5,17 +5,15 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"github.com/smartatransit/gomarta"
+	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
 	"log"
 	"net/http"
-	"os"
 )
 
-type MartaClient interface{}
-
-var martaClient MartaClient
+var martaClient clients.MartaClient
+var twitterClient clients.TwitterClient
 
 func main() {
 	err := godotenv.Load()
@@ -24,25 +22,35 @@ func main() {
 	}
 
 	if martaClient == nil {
-		martaClient = getMartaClient()
+		martaClient = clients.GetMartaClient()
 	}
 
-	mountAndServe(martaClient)
+	if twitterClient == nil {
+		twitterClient = clients.GetTwitterClient()
+	}
+
+	mountAndServe(martaClient, twitterClient)
 }
 
-func mountAndServe(client MartaClient) {
+func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	router := mux.NewRouter()
 
+	liveController := controllers.LiveController{MartaClient: mc}
 	liveRouter := router.PathPrefix("/live").Subrouter()
-	liveRouter.HandleFunc("/schedule/line/{line}", controllers.GetScheduleByLine).Methods("GET")
-	liveRouter.HandleFunc("/schedule/station/{station}", controllers.GetScheduleByStation).Methods("GET")
+	liveRouter.HandleFunc("/schedule/line/{line}", liveController.GetScheduleByLine).Methods("GET")
+	liveRouter.HandleFunc("/schedule/station/{station}", liveController.GetScheduleByStation).Methods("GET")
 
+	staticController := controllers.StaticController{}
 	staticRouter := router.PathPrefix("/static").Subrouter()
-	staticRouter.HandleFunc("/schedule/station", controllers.GetStaticScheduleByStation).Methods("GET")
-	staticRouter.HandleFunc("/lines", controllers.GetLines).Methods("GET")
-	staticRouter.HandleFunc("/directions", controllers.GetDirections).Methods("GET")
-	staticRouter.HandleFunc("/stations", controllers.GetStations).Methods("GET")
-	staticRouter.HandleFunc("/stations/location", controllers.GetLocations).Methods("GET")
+	staticRouter.HandleFunc("/schedule/station", staticController.GetStaticScheduleByStation).Methods("GET")
+	staticRouter.HandleFunc("/lines", staticController.GetLines).Methods("GET")
+	staticRouter.HandleFunc("/directions", staticController.GetDirections).Methods("GET")
+	staticRouter.HandleFunc("/stations", staticController.GetStations).Methods("GET")
+	staticRouter.HandleFunc("/stations/location", staticController.GetLocations).Methods("GET")
+
+	smartController := controllers.SmartController{TwitterClient: tc}
+	smartRouter := router.PathPrefix("/smart").Subrouter()
+	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
 
 	fmt.Println("started on port :5000")
 
@@ -53,8 +61,3 @@ func mountAndServe(client MartaClient) {
 		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"}),
 	)(middleware.SuffixMiddleware(router))))
 }
-
-func getMartaClient() MartaClient {
-	return gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-}
-
