@@ -1,9 +1,9 @@
 ![smarta](https://user-images.githubusercontent.com/8289478/57379460-f873e280-7174-11e9-9c32-b737bc49650c.png)
 <img src="https://user-images.githubusercontent.com/8289478/56633099-d6357d00-662a-11e9-9592-0c58dab8ca55.png" width="300" height="72" />
 
-SMARTA is a very thin wrapper around the
+The Third Rail API is part of the SMARTA project - a collection of tools and services built around
 [MARTA APIs](http://www.itsmarta.com/app-developer-resources.aspx) supplemented
-with analysis of historic patterns and static schedule data.
+with analysis of historic patterns, static schedule data, and external sources like Twitter. 
 
 ## Continuous Integration Status
 
@@ -13,18 +13,20 @@ with analysis of historic patterns and static schedule data.
 ## Project Goals
 
 Goals? Oh we've got goals - check 'em out in the
-[overview document](doc/overview.md).
+[overview document](https://github.com/smartatransit/infohub/blob/master/vision/overview.md).
 
 ### TODO
 
 - [x] Find rail schedule by line
 - [x] Find rail schedule by station
-- [x] Find bus schedule by stop
-- [x] Find bus stop by route
-- [ ] Find routes by stop
+- [] Find bus schedule by stop
+- [] Find bus stop by route
+- [] Find routes by stop
 - [x] Find rail stations by location
-- [ ] Add projected arrival/departure time based on historical trends
-- [ ] Create `with-credentials` wrapper for non-env credential flexibility
+- [x] Find nearest stations
+- [x] Parking status updates
+- [] Emergency notification updates
+- [] Add projected arrival/departure time based on historical trends
 
 ## Project Maturity
 
@@ -33,26 +35,28 @@ SMARTA is _very_ young. Young, scrappy, and hungry. 😎
 ## Prerequisites
 
 You will need a [MARTA API key](https://www.itsmarta.com/developer-reg-rtt.aspx)
-to fetch the live results from MARTA's base API.
+to fetch the live results from MARTA's base API. For Twitter interactions you will
+need a [Twitter Developer account](https://developer.twitter.com/en/apply-for-access) 
+and an API client and secret. 
 
-You will need [Leiningen][] 2.0.0 or above installed.
+To build and run Third Rail as a container you will need Docker.  
 
 [leiningen]: https://github.com/technomancy/leiningen
 
-## Running
+## Building
 
-To start a web server for the application, run:
+To build the application, run:
 
-    lein ring server
+    make
 
 ## Tests
 
 To run tests for the application, run:
 
-    lein test
+    make test
 
 ## License
 
-Copyright© 2019 SMARTA Transit
+Copyright© 2020 SMARTA Transit
 
 Distributed under the GNU Public License version 3

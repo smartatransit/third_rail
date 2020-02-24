@@ -9,7 +9,6 @@ import (
 )
 
 type StaticController struct {
-
 }
 
 func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {

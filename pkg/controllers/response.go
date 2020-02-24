@@ -41,7 +41,7 @@ type stationsLocationResponse struct {
 
 type parkingData struct {
 	Station schemas.Station `json:"station"`
-	Status string `json"status"`
+	Status  string          `json:"status"`
 }
 
 type parkingResponse struct {

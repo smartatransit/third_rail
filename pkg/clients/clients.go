@@ -1,8 +1,8 @@
 package clients
 
 import (
-	"github.com/karlseguin/ccache"
 	"github.com/dghubble/go-twitter/twitter"
+	"github.com/karlseguin/ccache"
 	"github.com/smartatransit/gomarta"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type MartaClient interface{
+type MartaClient interface {
 	GetTrains() (gomarta.TrainAPIResponse, error)
 }
 
@@ -20,24 +20,24 @@ type TwitterClient interface {
 
 type TwitterAPIClient struct {
 	client *twitter.Client
-	cache *ccache.Cache
+	cache  *ccache.Cache
 }
 
 type MartaAPIClient struct {
 	client *gomarta.Client
-	cache *ccache.Cache
+	cache  *ccache.Cache
 }
 
 func GetMartaClient() MartaAPIClient {
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
 	var marta = gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
 
-	return MartaAPIClient{ client:marta, cache:cache}
+	return MartaAPIClient{client: marta, cache: cache}
 }
 
 func (m MartaAPIClient) GetTrains() (gomarta.TrainAPIResponse, error) {
 
-	trains, err := m.cache.Fetch("trains", time.Second * 15, func() (interface{}, error) {
+	trains, err := m.cache.Fetch("trains", time.Second*15, func() (interface{}, error) {
 		return m.client.GetTrains()
 	})
 
@@ -61,11 +61,11 @@ func GetTwitterClient() TwitterAPIClient {
 
 	client := twitter.NewClient(httpClient)
 
-	return TwitterAPIClient{client:client, cache:cache}
+	return TwitterAPIClient{client: client, cache: cache}
 }
 
 func (t TwitterAPIClient) Search(searchKey string, search *twitter.SearchTweetParams) (*twitter.Search, error) {
-	tweets, err := t.cache.Fetch(searchKey, time.Second * 15, func() (interface{}, error) {
+	tweets, err := t.cache.Fetch(searchKey, time.Second*15, func() (interface{}, error) {
 		result, _, err := t.client.Search.Tweets(search)
 		return result, err
 	})
@@ -76,4 +76,3 @@ func (t TwitterAPIClient) Search(searchKey string, search *twitter.SearchTweetPa
 
 	return tweets.Value().(*twitter.Search), nil
 }
-

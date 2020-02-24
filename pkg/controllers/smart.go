@@ -51,10 +51,9 @@ func (controller SmartController) GetEmergencyStatus(w http.ResponseWriter, req 
 	json.NewEncoder(w).Encode(response)
 }
 
-
 func (controller SmartController) getParking() *twitter.Search {
 	search, _ := controller.TwitterClient.Search("parking", &twitter.SearchTweetParams{
-		Query: "from:@martaservice #parkingupdate",
+		Query:     "from:@martaservice #parkingupdate",
 		TweetMode: "extended",
 	})
 
@@ -63,10 +62,9 @@ func (controller SmartController) getParking() *twitter.Search {
 
 func (controller SmartController) getEmergencies() *twitter.Search {
 	search, _ := controller.TwitterClient.Search("emergencies", &twitter.SearchTweetParams{
-		Query: "from:@martapolice",
+		Query:     "from:@martapolice",
 		TweetMode: "extended",
 	})
 
 	return search
 }
-

@@ -3,9 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/transformers"
 	"github.com/smartatransit/third_rail/pkg/validators"
-	"github.com/smartatransit/third_rail/pkg/clients"
 	"log"
 	"net/http"
 )
