@@ -1,8 +1,6 @@
 package twitter_client
 
 import (
-	"os"
-	"strconv"
 	"time"
 
 	"os"
@@ -28,14 +26,9 @@ type MartaAPIClient struct {
 	cacheTTL int
 }
 
-func GetMartaClient() MartaAPIClient {
+func GetMartaClient(apiKey string, cacheTTL int) MartaAPIClient {
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
-	var marta = gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-	cacheTTL, err := strconv.Atoi(os.Getenv("MARTA_CACHE_TTL"))
-
-	if err != nil {
-		cacheTTL = 15
-	}
+	var marta = gomarta.NewDefaultClient(apiKey)
 
 	return MartaAPIClient{client: marta, cache: cache, cacheTTL: cacheTTL}
 }
@@ -53,23 +46,18 @@ func (m MartaAPIClient) GetTrains() (gomarta.TrainAPIResponse, error) {
 	return trains.Value().(gomarta.TrainAPIResponse), nil
 }
 
-func GetTwitterClient() TwitterAPIClient {
+func GetTwitterClient(clientID string, clientSecret string, cacheTTL int) TwitterAPIClient {
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
 
 	config := &clientcredentials.Config{
-		ClientID:     os.Getenv("TWITTER_CLIENT_ID"),
-		ClientSecret: os.Getenv("TWITTER_CLIENT_SECRET"),
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
 		TokenURL:     "https://api.twitter.com/oauth2/token",
 	}
 
 	httpClient := config.Client(oauth2.NoContext)
 
 	client := twitter.NewClient(httpClient)
-	cacheTTL, err := strconv.Atoi(os.Getenv("MARTA_CACHE_TTL"))
-
-	if err != nil {
-		cacheTTL = 15
-	}
 
 	return TwitterAPIClient{client: client, cache: cache, cacheTTL: cacheTTL}
 }
