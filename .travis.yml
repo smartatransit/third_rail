@@ -24,7 +24,7 @@ script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "staging" ; fi`
 
-  - GOOS=linux go build
+  - GOOS=linux go build cmd/third_rail/main.go
   - export docker_repo=smartatransit/third_rail
   - export docker_build_directory=.
   - export tags="build-${TRAVIS_BUILD_NUMBER},commit-${TRAVIS_COMMIT::8},$TAG"
