@@ -1,10 +1,10 @@
 package transformers
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/gomarta"
-	"github.com/smartatransit/third_rail/pkg/schemas"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"github.com/smartatransit/third_rail/pkg/validators"
-	"log"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ func NewEventTransformer(mev validators.MartaEntitiesValidator) (et EventTransfo
 	return
 }
 
-func (et EventTransformer) GetStation(event gomarta.Train) schemas.Station {
+func (et EventTransformer) GetStation(event gomarta.Train) marta_schemas.Station {
 	direction, _ := et.MEV.Coerce(validators.MARTA_DIRECTIONS, string(event.Direction))
 	line, _ := et.MEV.Coerce(validators.MARTA_LINES, string(event.Line))
 	station, err := et.MEV.Coerce(validators.MARTA_STATIONS, event.Station)
@@ -27,14 +27,14 @@ func (et EventTransformer) GetStation(event gomarta.Train) schemas.Station {
 		log.Printf("Coercion miss: %s", err)
 	}
 
-	return schemas.Station{
+	return marta_schemas.Station{
 		Direction: direction,
 		Line:      line,
 		Name:      station,
 	}
 }
 
-func (et EventTransformer) GetSchedule(event gomarta.Train) schemas.Schedule {
+func (et EventTransformer) GetSchedule(event gomarta.Train) marta_schemas.Schedule {
 	destination, destErr := et.MEV.Coerce(validators.MARTA_STATIONS, event.Destination)
 
 	if destErr != nil {
@@ -47,7 +47,7 @@ func (et EventTransformer) GetSchedule(event gomarta.Train) schemas.Schedule {
 		log.Printf("Coercion miss: %s", statErr)
 	}
 
-	return schemas.Schedule{
+	return marta_schemas.Schedule{
 		Destination:    destination,
 		EventTime:      event.EventTime,
 		NextArrival:    event.NextArrival,

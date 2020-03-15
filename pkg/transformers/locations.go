@@ -1,28 +1,30 @@
 package transformers
 
 import (
+	"encoding/csv"
 	"github.com/mmcloughlin/geohash"
-	"github.com/smartatransit/third_rail/pkg/schemas"
-	"log"
+	log "github.com/sirupsen/logrus"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"math"
+	"os"
 	"sort"
 )
 
 type LocationTransformer struct {
-	Stations []schemas.StationLocation
+	Stations []marta_schemas.StationLocation
 }
 
 func NewLocationTransformer() LocationTransformer {
 	stations, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Panic("OH SHIT OH SHIT OH SHIT NO CSV FOUND OH SHIT")
+		log.Fatalf("Unable to load static station data: %s", err)
 	}
 
 	return LocationTransformer{parseStationData(stations)}
 }
 
-func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []schemas.StationLocation) {
+func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []marta_schemas.StationLocation) {
 	for _, locationStation := range lt.Stations {
 		stationLat, stationLong := geohash.Decode(locationStation.Location)
 		locationStation.Distance = calculateDistance(latitude, longitude, stationLat, stationLong)
@@ -36,9 +38,9 @@ func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (
 	return
 }
 
-func parseStationData(stationData [][]string) (stationLocations []schemas.StationLocation) {
+func parseStationData(stationData [][]string) (stationLocations []marta_schemas.StationLocation) {
 	for i, _ := range stationData[0] {
-		station := schemas.StationLocation{
+		station := marta_schemas.StationLocation{
 			StationName: stationData[0][i],
 			Location:    stationData[1][i],
 			Distance:    0,
@@ -48,6 +50,24 @@ func parseStationData(stationData [][]string) (stationLocations []schemas.Statio
 
 	return
 }
+
+func parseCsv(fileName string) ([][]string, error) {
+
+	f, err := os.Open(fileName)
+	if err != nil {
+		log.Fatal("Unable to read input file "+fileName, err)
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		log.Fatal("Unable to parse file as CSV for "+fileName, err)
+	}
+
+	return records, err
+}
+
 func hsin(theta float64) float64 {
 	return math.Pow(math.Sin(theta/2), 2)
 }

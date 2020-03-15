@@ -1,31 +1,35 @@
 package transformers
 
 import (
-	"github.com/smartatransit/third_rail/pkg/schemas"
-	"log"
+	log "github.com/sirupsen/logrus"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 )
 
 type StaticScheduleTransformer struct {
-	Stations []schemas.StationLocation
+	Schedules struct {
+		Weekday  []marta_schemas.StationSchedule
+		Saturday []marta_schemas.StationSchedule
+		Sunday   []marta_schemas.StationSchedule
+	}
 }
 
 func NewStaticScheduleTransformer() StaticScheduleTransformer {
-	stations, err := parseCsv("data/location/stations.csv")
+	_, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Panic("OH SHIT OH SHIT OH SHIT NO CSV FOUND OH SHIT")
+		log.Fatalf("Unable to load static station data: %s", err)
 	}
 
-	return StaticScheduleTransformer{parseStationData(stations)}
+	return StaticScheduleTransformer{}
 }
 
-func (lt StaticScheduleTransformer) GetSchedule(schedule, stationName string) (sortedStationLocations []schemas.StationLocation) {
+func (lt StaticScheduleTransformer) GetSchedule(schedule, stationName string) (sortedStationLocations []marta_schemas.StationLocation) {
 	return
 }
 
-func parseScheduleData(stationData [][]string) (stationLocations []schemas.StationLocation) {
+func parseScheduleData(stationData [][]string) (stationLocations []marta_schemas.StationLocation) {
 	for i, _ := range stationData[0] {
-		station := schemas.StationLocation{
+		station := marta_schemas.StationLocation{
 			StationName: stationData[0][i],
 			Location:    stationData[1][i],
 			Distance:    0,

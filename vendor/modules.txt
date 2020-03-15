@@ -16,6 +16,8 @@ github.com/gorilla/mux
 github.com/joho/godotenv
 # github.com/karlseguin/ccache v2.0.3+incompatible
 github.com/karlseguin/ccache
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
 # github.com/mailru/easyjson v0.7.0
 github.com/mailru/easyjson
 github.com/mailru/easyjson/jlexer
@@ -23,6 +25,8 @@ github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
 # github.com/mmcloughlin/geohash v0.9.0
 github.com/mmcloughlin/geohash
+# github.com/sirupsen/logrus v1.4.2
+github.com/sirupsen/logrus
 # github.com/smartatransit/gomarta v1.0.0
 github.com/smartatransit/gomarta
 # github.com/thoas/go-funk v0.5.0
@@ -34,6 +38,8 @@ golang.org/x/net/context
 golang.org/x/oauth2
 golang.org/x/oauth2/clientcredentials
 golang.org/x/oauth2/internal
+# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
+golang.org/x/sys/unix
 # google.golang.org/appengine v1.4.0
 google.golang.org/appengine/urlfetch
 google.golang.org/appengine/internal
