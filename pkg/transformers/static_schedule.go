@@ -6,10 +6,10 @@ import (
 )
 
 type StaticScheduleTransformer struct {
-	Schedules struct{
-		Weekday []marta_schemas.StationSchedule
+	Schedules struct {
+		Weekday  []marta_schemas.StationSchedule
 		Saturday []marta_schemas.StationSchedule
-		Sunday []marta_schemas.StationSchedule
+		Sunday   []marta_schemas.StationSchedule
 	}
 }
 
@@ -17,7 +17,7 @@ func NewStaticScheduleTransformer() StaticScheduleTransformer {
 	_, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Fatal("Unable to load static station data: %s", err)
+		log.Fatalf("Unable to load static station data: %s", err)
 	}
 
 	return StaticScheduleTransformer{}

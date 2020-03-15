@@ -16,6 +16,4 @@ type TwitterClient interface {
 }
 
 type DataClient interface {
-
 }
-
