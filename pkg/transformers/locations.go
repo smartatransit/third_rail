@@ -1,10 +1,12 @@
 package transformers
 
 import (
+	"encoding/csv"
 	"github.com/mmcloughlin/geohash"
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
-	"log"
 	"math"
+	"os"
 	"sort"
 )
 
@@ -16,7 +18,7 @@ func NewLocationTransformer() LocationTransformer {
 	stations, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Panic("OH SHIT OH SHIT OH SHIT NO CSV FOUND OH SHIT")
+		log.Fatal("Unable to load static station data: %s", err)
 	}
 
 	return LocationTransformer{parseStationData(stations)}
@@ -48,6 +50,25 @@ func parseStationData(stationData [][]string) (stationLocations []marta_schemas.
 
 	return
 }
+
+
+func parseCsv(fileName string) ([][]string, error) {
+
+	f, err := os.Open(fileName)
+	if err != nil {
+		log.Fatal("Unable to read input file "+fileName, err)
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		log.Fatal("Unable to parse file as CSV for "+fileName, err)
+	}
+
+	return records, err
+}
+
 func hsin(theta float64) float64 {
 	return math.Pow(math.Sin(theta/2), 2)
 }

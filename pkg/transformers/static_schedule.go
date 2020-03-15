@@ -1,22 +1,26 @@
 package transformers
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
-	"log"
 )
 
 type StaticScheduleTransformer struct {
-	Stations []marta_schemas.StationLocation
+	Schedules struct{
+		Weekday []marta_schemas.StationSchedule
+		Saturday []marta_schemas.StationSchedule
+		Sunday []marta_schemas.StationSchedule
+	}
 }
 
 func NewStaticScheduleTransformer() StaticScheduleTransformer {
-	stations, err := parseCsv("data/location/stations.csv")
+	_, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Panic("OH SHIT OH SHIT OH SHIT NO CSV FOUND OH SHIT")
+		log.Fatal("Unable to load static station data: %s", err)
 	}
 
-	return StaticScheduleTransformer{parseStationData(stations)}
+	return StaticScheduleTransformer{}
 }
 
 func (lt StaticScheduleTransformer) GetSchedule(schedule, stationName string) (sortedStationLocations []marta_schemas.StationLocation) {

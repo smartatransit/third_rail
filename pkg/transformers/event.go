@@ -1,10 +1,10 @@
 package transformers
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"github.com/smartatransit/third_rail/pkg/validators"
-	"log"
 	"strings"
 )
 
