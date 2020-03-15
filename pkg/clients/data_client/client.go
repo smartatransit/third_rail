@@ -15,17 +15,17 @@ import (
 )
 
 type StaticDataClient struct {
-	cache    *ccache.Cache
-	cacheTTL time.Duration
+	cache            *ccache.Cache
+	cacheTTL         time.Duration
 	stationLocations []marta_schemas.StationLocation
 	stationSchedules []marta_schemas.StationSchedule
 }
 
-func NewStaticDataClient() clients.DataClient  {
+func NewStaticDataClient() clients.DataClient {
 	stationLocations, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Fatal("Unable to load static station data: %s", err)
+		log.Fatalf("Unable to load static station data: %s", err)
 	}
 
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
@@ -37,8 +37,8 @@ func NewStaticDataClient() clients.DataClient  {
 
 	return StaticDataClient{
 		stationLocations: parseLocationData(stationLocations),
-		cache:cache,
-		cacheTTL:time.Duration(cacheTTL),
+		cache:            cache,
+		cacheTTL:         time.Duration(cacheTTL),
 	}
 }
 

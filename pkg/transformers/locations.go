@@ -18,7 +18,7 @@ func NewLocationTransformer() LocationTransformer {
 	stations, err := parseCsv("data/location/stations.csv")
 
 	if err != nil {
-		log.Fatal("Unable to load static station data: %s", err)
+		log.Fatalf("Unable to load static station data: %s", err)
 	}
 
 	return LocationTransformer{parseStationData(stations)}
@@ -50,7 +50,6 @@ func parseStationData(stationData [][]string) (stationLocations []marta_schemas.
 
 	return
 }
-
 
 func parseCsv(fileName string) ([][]string, error) {
 
