@@ -2,15 +2,14 @@ package marta_client
 
 import (
 	"encoding/xml"
-	"github.com/karlseguin/ccache"
-	"github.com/smartatransit/gomarta"
-	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
+
+	"github.com/karlseguin/ccache"
+	"github.com/smartatransit/gomarta"
+	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 )
 
 const MARTA_ALERT_ENDPOINT = "https://martaalerts.com/webdata.aspx"
@@ -21,14 +20,9 @@ type MartaAPIClient struct {
 	cacheTTL time.Duration
 }
 
-func GetMartaClient() MartaAPIClient {
+func GetMartaClient(apiKey string, cacheTTL int) MartaAPIClient {
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
-	var marta = gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-	cacheTTL, err := strconv.Atoi(os.Getenv("MARTA_CACHE_TTL"))
-
-	if err != nil {
-		cacheTTL = 15
-	}
+	var marta = gomarta.NewDefaultClient(apiKey)
 
 	return MartaAPIClient{client: marta, cache: cache, cacheTTL: time.Duration(cacheTTL)}
 }
