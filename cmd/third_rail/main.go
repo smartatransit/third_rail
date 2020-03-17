@@ -8,13 +8,14 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jessevdk/go-flags"
-	"github.com/smartatransit/third_rail/pkg/clients"
+	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
+	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
 )
 
-var martaClient clients.MartaClient
-var twitterClient clients.TwitterClient
+var martaClient marta_client.MartaAPIClient
+var twitterClient twitter_client.TwitterAPIClient
 
 type options struct {
 	TwitterClientID     string `long:"twitter-client-id" env:"TWITTER_CLIENT_ID" description:"the client id for the twitter acount"`
@@ -31,18 +32,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if martaClient == nil {
-		martaClient = clients.GetMartaClient(opts.MartaAPIKey, opts.MartaCacheTTL)
-	}
-
-	if twitterClient == nil {
-		twitterClient = clients.GetTwitterClient(opts.TwitterClientID, opts.TwitterClientSecret, opts.TwitterCacheTTL)
-	}
+	martaClient = marta_client.GetMartaClient(opts.MartaAPIKey, opts.MartaCacheTTL)
+	twitterClient = twitter_client.GetTwitterClient(opts.TwitterClientID, opts.TwitterClientSecret, opts.TwitterCacheTTL)
 
 	mountAndServe(martaClient, twitterClient)
 }
 
-func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
+func mountAndServe(mc marta_client.MartaAPIClient, tc twitter_client.TwitterAPIClient) {
 	router := mux.NewRouter()
 
 	liveController := controllers.LiveController{MartaClient: mc}
