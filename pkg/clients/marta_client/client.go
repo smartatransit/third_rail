@@ -3,13 +3,11 @@ package marta_client
 import (
 	"encoding/xml"
 	"github.com/karlseguin/ccache"
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 )
 
@@ -21,14 +19,17 @@ type MartaAPIClient struct {
 	cacheTTL time.Duration
 }
 
-func GetMartaClient() MartaAPIClient {
-	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
-	var marta = gomarta.NewDefaultClient(os.Getenv("MARTA_API_KEY"))
-	cacheTTL, err := strconv.Atoi(os.Getenv("MARTA_CACHE_TTL"))
-
-	if err != nil {
-		cacheTTL = 15
+func GetMartaClient(apiKey string, cacheTTL int) MartaAPIClient {
+	if len(apiKey) < 1 {
+		log.Fatal("No MARTA API key found - real-time API results are unavailable.")
 	}
+
+	if cacheTTL < 1 {
+		log.Warn("MARTA API caching set to < 1ms - API results are not being cached.")
+	}
+
+	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
+	var marta = gomarta.NewDefaultClient(apiKey)
 
 	return MartaAPIClient{client: marta, cache: cache, cacheTTL: time.Duration(cacheTTL)}
 }

@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
+	"github.com/jessevdk/go-flags"
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
 	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
-	"log"
 	"net/http"
 )
 
@@ -18,17 +18,19 @@ var martaClient clients.MartaClient
 var twitterClient clients.TwitterClient
 
 func main() {
-	err := godotenv.Load()
+	var opts options
+	_, err := flags.Parse(&opts)
+
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal(err)
 	}
 
 	if martaClient == nil {
-		martaClient = marta_client.GetMartaClient()
+		martaClient = marta_client.GetMartaClient(opts.MartaAPIKey, opts.MartaCacheTTL)
 	}
 
 	if twitterClient == nil {
-		twitterClient = twitter_client.GetTwitterClient()
+		twitterClient = twitter_client.GetTwitterClient(opts.TwitterClientID, opts.TwitterClientSecret, opts.TwitterCacheTTL)
 	}
 
 	mountAndServe(martaClient, twitterClient)
