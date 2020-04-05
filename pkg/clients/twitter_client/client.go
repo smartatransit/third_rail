@@ -3,10 +3,9 @@ package twitter_client
 import (
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/karlseguin/ccache"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
-	"os"
-	"strconv"
 	"time"
 )
 
@@ -16,23 +15,26 @@ type TwitterAPIClient struct {
 	cacheTTL time.Duration
 }
 
-func GetTwitterClient() TwitterAPIClient {
+func GetTwitterClient(clientId, clientSecret string, cacheTTL int) TwitterAPIClient {
+	if len(clientId) < 1 || len(clientSecret) < 1 {
+		log.Fatal("Twitter API credentials not found - Twitter alerts are unavailable.")
+	}
+
+	if cacheTTL < 1 {
+		log.Warn("Twitter caching set to < 1ms - Twitter results are not being cached and will be rate-limited.")
+	}
+
 	var cache = ccache.New(ccache.Configure().MaxSize(1000).ItemsToPrune(100))
 
 	config := &clientcredentials.Config{
-		ClientID:     os.Getenv("TWITTER_CLIENT_ID"),
-		ClientSecret: os.Getenv("TWITTER_CLIENT_SECRET"),
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
 		TokenURL:     "https://api.twitter.com/oauth2/token",
 	}
 
 	httpClient := config.Client(oauth2.NoContext)
 
 	client := twitter.NewClient(httpClient)
-	cacheTTL, err := strconv.Atoi(os.Getenv("MARTA_CACHE_TTL"))
-
-	if err != nil {
-		cacheTTL = 15
-	}
 
 	return TwitterAPIClient{client: client, cache: cache, cacheTTL: time.Duration(cacheTTL)}
 }
