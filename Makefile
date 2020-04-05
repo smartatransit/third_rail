@@ -16,7 +16,7 @@
 BIN := third_rail
 
 # Where to push the docker image.
-REGISTRY ?= smartatransit
+REGISTRY ?= smartatransit/third_rail
 
 # This version-strategy uses git tags to set the version string
 VERSION ?= $(shell git describe --tags --always --dirty)
