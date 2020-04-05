@@ -29,7 +29,7 @@ script:
   - export docker_build_directory=.
   - export tags="build-${TRAVIS_BUILD_NUMBER},commit-${TRAVIS_COMMIT::8},$TAG"
   #- ./build/build_and_push_image.sh
-  - GOOS=linux make push "smartatransit/third_late:lastest"
+  - GOOS=linux make push
 
 after_success:
   - touch coverage.txt; find . -name "*.coverprofile" | xargs -l cat >> coverage.txt
