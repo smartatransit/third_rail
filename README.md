@@ -19,14 +19,14 @@ Goals? Oh we've got goals - check 'em out in the
 
 - [x] Find rail schedule by line
 - [x] Find rail schedule by station
-- [] Find bus schedule by stop
-- [] Find bus stop by route
-- [] Find routes by stop
+- [ ] Find bus schedule by stop
+- [ ] Find bus stop by route
+- [ ] Find routes by stop
 - [x] Find rail stations by location
 - [x] Find nearest stations
 - [x] Parking status updates
-- [] Emergency notification updates
-- [] Add projected arrival/departure time based on historical trends
+- [ ] Emergency notification updates
+- [ ] Add projected arrival/departure time based on historical trends
 
 ## Project Maturity
 
