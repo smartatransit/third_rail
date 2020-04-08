@@ -23,9 +23,6 @@ before_script:
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "staging" ; fi`
-  - export docker_repo=smartatransit/third_rail
-  - export docker_build_directory=.
-  - export tags="build-${TRAVIS_BUILD_NUMBER},commit-${TRAVIS_COMMIT::8},$TAG"
   - GOOS=linux make build
   - GOOS=linux make test
   #- GOOS=linux make push
