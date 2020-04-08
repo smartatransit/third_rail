@@ -39,7 +39,7 @@ ARCH := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 BASEIMAGE ?= gcr.io/distroless/static
 
 IMAGE := $(REGISTRY)/$(BIN)
-TAG := $(VERSION)__$(OS)_$(ARCH)
+TAG := build-$(TRAVIS_BUILD_NUMBER)
 
 BUILD_IMAGE ?= golang:1.13-alpine
 
@@ -151,7 +151,7 @@ say_container_name:
 	@echo "container: $(IMAGE):$(TAG)"
 
 push: .container-$(DOTFILE_IMAGE) say_push_name
-	$(foreach aTag,$(subst \,, ,$(TAGS)),@docker push $(IMAGE):$(aTag))
+	@docker push $(IMAGE):$(TAG)
 
 say_push_name:
 	@echo "pushed: $(IMAGE):$(TAG)"
