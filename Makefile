@@ -151,7 +151,7 @@ say_container_name:
 	@echo "container: $(IMAGE):$(TAG)"
 
 push: .container-$(DOTFILE_IMAGE) say_push_name
-	@docker push $(IMAGE):$(TAG)
+	$(foreach aTag,$(subst \,, ,$(TAGS)),@docker push $(IMAGE):$(aTag))
 
 say_push_name:
 	@echo "pushed: $(IMAGE):$(TAG)"
