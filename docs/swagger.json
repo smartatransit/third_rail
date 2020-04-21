@@ -1,0 +1,123 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API to serve you SMARTA data",
+        "title": "SMARTA API",
+        "contact": {
+            "name": "SMARTA Support",
+            "email": "smartatransit@gmail.com"
+        },
+        "license": {
+            "name": "GNU General Public License v3.0",
+            "url": "https://github.com/smartatransit/third_rail/blob/master/LICENSE"
+        },
+        "version": "1.0"
+    },
+    "host": "http://third-rail-secure.services.ataper.net",
+    "paths": {
+        "/live/schedule/line/{line}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Given a line, return the current schedule",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Schedule By Line",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Line",
+                        "name": "line",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controllers.response": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.responseData"
+                    }
+                }
+            }
+        },
+        "controllers.responseData": {
+            "type": "object",
+            "properties": {
+                "schedule": {
+                    "type": "object",
+                    "$ref": "#/definitions/marta_schemas.Schedule"
+                },
+                "station": {
+                    "type": "object",
+                    "$ref": "#/definitions/marta_schemas.Station"
+                }
+            }
+        },
+        "marta_schemas.Schedule": {
+            "type": "object",
+            "properties": {
+                "destination": {
+                    "type": "string"
+                },
+                "event_time": {
+                    "type": "string"
+                },
+                "next_arrival": {
+                    "type": "string"
+                },
+                "next_station": {
+                    "type": "string"
+                },
+                "train_id": {
+                    "type": "string"
+                },
+                "waiting_seconds": {
+                    "type": "string"
+                },
+                "waiting_time": {
+                    "type": "string"
+                }
+            }
+        },
+        "marta_schemas.Station": {
+            "type": "object",
+            "properties": {
+                "direction": {
+                    "type": "string"
+                },
+                "line": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

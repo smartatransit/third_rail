@@ -1,0 +1,80 @@
+definitions:
+  controllers.response:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/controllers.responseData'
+        type: array
+    type: object
+  controllers.responseData:
+    properties:
+      schedule:
+        $ref: '#/definitions/marta_schemas.Schedule'
+        type: object
+      station:
+        $ref: '#/definitions/marta_schemas.Station'
+        type: object
+    type: object
+  marta_schemas.Schedule:
+    properties:
+      destination:
+        type: string
+      event_time:
+        type: string
+      next_arrival:
+        type: string
+      next_station:
+        type: string
+      train_id:
+        type: string
+      waiting_seconds:
+        type: string
+      waiting_time:
+        type: string
+    type: object
+  marta_schemas.Station:
+    properties:
+      direction:
+        type: string
+      line:
+        type: string
+      name:
+        type: string
+    type: object
+host: http://third-rail-secure.services.ataper.net
+info:
+  contact:
+    email: smartatransit@gmail.com
+    name: SMARTA Support
+  description: API to serve you SMARTA data
+  license:
+    name: GNU General Public License v3.0
+    url: https://github.com/smartatransit/third_rail/blob/master/LICENSE
+  title: SMARTA API
+  version: "1.0"
+paths:
+  /live/schedule/line/{line}:
+    get:
+      description: Given a line, return the current schedule
+      parameters:
+      - description: Line
+        in: path
+        name: line
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Schedule By Line
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

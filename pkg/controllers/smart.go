@@ -2,15 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/smartatransit/third_rail/pkg/clients"
-	"net/http"
 )
 
 type SmartController struct {
 	TwitterClient clients.TwitterClient
 }
 
+// GetParkingStatus godoc
+// @Summary Get Parking Information
+// @Description  Get available parking information as informed by twitter
+// @Produce  json
+// @Success 200 {object} parkingResponse
+// @Router /smart/parking [get]
+// @Security ApiKeyAuth
 func (controller SmartController) GetParkingStatus(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	//v := req.URL.Query()
