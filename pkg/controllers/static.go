@@ -2,15 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/smartatransit/third_rail/pkg/transformers"
-	"github.com/smartatransit/third_rail/pkg/validators"
 	"net/http"
 	"strconv"
+
+	"github.com/smartatransit/third_rail/pkg/transformers"
+	"github.com/smartatransit/third_rail/pkg/validators"
 )
 
 type StaticController struct {
 }
 
+// GetStaticScheduleByStation godoc
+// @Summary Get Static Schedule By Station
+// @Description Get MARTA's scheduled times for arrival for all stations
+// @Produce  json
+// @Success 200 {object} response
+// @Router /static/schedule/station [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()

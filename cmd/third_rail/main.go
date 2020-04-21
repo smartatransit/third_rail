@@ -2,16 +2,19 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jessevdk/go-flags"
 	log "github.com/sirupsen/logrus"
+	_ "github.com/smartatransit/third_rail/docs"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
 	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
-	"net/http"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 var martaClient clients.MartaClient
@@ -36,6 +39,21 @@ func main() {
 	mountAndServe(martaClient, twitterClient)
 }
 
+// @title SMARTA API
+// @version 1.0
+// @description API to serve you SMARTA data
+
+// @contact.name SMARTA Support
+// @contact.email smartatransit@gmail.com
+
+// @license.name GNU General Public License v3.0
+// @license.url https://github.com/smartatransit/third_rail/blob/master/LICENSE
+
+// @host third-rail.services.ataper.net
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	router := mux.NewRouter()
 
@@ -56,6 +74,8 @@ func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	smartController := controllers.SmartController{TwitterClient: tc}
 	smartRouter := router.PathPrefix("/smart").Subrouter()
 	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
+
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
 	fmt.Println("started on port :5000")
 

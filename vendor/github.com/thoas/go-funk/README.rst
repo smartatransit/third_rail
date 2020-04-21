@@ -135,6 +135,36 @@ see also, typesafe implementations: ContainsInt_, ContainsInt64_, ContainsFloat3
 .. _ContainsInt64: https://godoc.org/github.com/thoas/go-funk#ContainsInt64
 .. _ContainsString: https://godoc.org/github.com/thoas/go-funk#ContainsString
 
+funk.Intersect
+..............
+
+Returns the intersection between two collections.
+
+```
+inter := funk.Intersect([]int{1, 2, 3, 4}, []int{2, 4, 6})  // []int{2, 4}
+inter := funk.Intersect([]string{"foo", "bar", "hello", "bar"}, []string{"foo", "bar"})  // []string{"foo", "bar"}
+```
+
+see also, typesafe implementations: IntersectString
+
+.. IntersectString: https://godoc.org/github.com/thoas/go-funk#IntersectString
+
+
+funk.Difference
+..............
+
+Returns the difference between two collections.
+
+```
+left, right := funk.Difference([]int{1, 2, 3, 4}, []int{2, 4, 6})  // []int{1, 3}, []int{6}
+left, right := funk.Difference([]string{"foo", "bar", "hello", "bar"}, []string{"foo", "bar"})  // []string{"hello"}, []string{}
+```
+
+see also, typesafe implementations: DifferenceString
+
+.. DifferenceString: https://godoc.org/github.com/thoas/go-funk#DifferenceString
+
+
 funk.IndexOf
 ............
 
@@ -342,6 +372,21 @@ Retrieves the value at path of struct(s).
     funk.Get([]*Foo{foo1, foo2}, "Bar.Name") // []string{"Test"}
     funk.Get(foo2, "Bar.Name") // nil
 
+
+
+funk.GetOrElse
+..............
+
+Retrieves the value of the pointer or default.
+
+.. code-block:: go
+
+    str := "hello world"
+    GetOrElse(&str, "foobar")   // string{"hello world"}
+    GetOrElse(str, "foobar")    // string{"hello world"}
+    GetOrElse(nil, "foobar")    // string{"foobar"}
+
+
 funk.Keys
 .........
 
@@ -494,6 +539,21 @@ see also, typesafe implementations: ShuffleInt_, ShuffleInt64_, ShuffleFloat32_,
 .. _ShuffleInt64: https://godoc.org/github.com/thoas/go-funk#ShuffleInt64
 .. _ShuffleString: https://godoc.org/github.com/thoas/go-funk#ShuffleString
 
+funk.Subtract
+.............
+
+Returns the subtraction between two collections. It preserve order.
+
+.. code-block:: go
+
+    funk.Subtract([]int{0, 1, 2, 3, 4}, []int{0, 4}) // []int{1, 2, 3}
+    funk.Subtract([]int{0, 3, 2, 3, 4}, []int{0, 4}) // []int{3, 2, 3}
+
+
+see also, typesafe implementations: SubtractString_
+
+.. SubtractString: https://godoc.org/github.com/thoas/go-funk#SubtractString
+
 funk.Sum
 ........
 
@@ -600,7 +660,7 @@ you should use typesafe implementations instead.
 Contributing
 ------------
 
-* Ping me on twitter `@thoas <https://twitter.com/thoas>`_
+* Ping me on twitter `@thoas <https://twitter.com/thoas>`_ (DMs, mentions, whatever :))
 * Fork the `project <https://github.com/thoas/go-funk>`_
 * Fix `open issues <https://github.com/thoas/go-funk/issues>`_ or request new features
 
