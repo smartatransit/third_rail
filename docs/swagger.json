@@ -13,8 +13,30 @@
         },
         "version": "1.0"
     },
-    "host": "http://third-rail-secure.services.ataper.net",
+    "host": "third-rail.services.ataper.net",
     "paths": {
+        "/live/alerts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "MARTA alerts sourced from their official twitter account",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Alerts from various MARTA sources",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.alertResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/live/schedule/line/{line}": {
             "get": {
                 "security": [
@@ -22,7 +44,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Given a line, return the current schedule",
+                "description": "Given a line, return the current live schedule",
                 "produces": [
                     "application/json"
                 ],
@@ -30,7 +52,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Line",
+                        "description": "RED, GOLD, BLUE, GREEN",
                         "name": "line",
                         "in": "path",
                         "required": true
@@ -45,9 +67,261 @@
                     }
                 }
             }
+        },
+        "/live/schedule/station/{station}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Given a station, return the current live schedule",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Schedule By Station",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "TODO: Enter all stations as enum?",
+                        "name": "station",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/smart/parking": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get available parking information as informed by twitter",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Parking Information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.parkingResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/static/directions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all available directions",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Directions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.directionsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/static/lines": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all available lines",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Lines",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.linesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/static/location": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get nearest station given a lat and lng",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get nearest station given a lat and lng",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Latitude",
+                        "name": "latitutde",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.stationsLocationResponse"
+                        }
+                    },
+                    "400": {}
+                }
+            }
+        },
+        "/static/schedule/station": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get MARTA's scheduled times for arrival for all stations",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Static Schedule By Station",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/static/stations": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get all available stations",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Stations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.stationsResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "controllers.alertResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/marta_schemas.Alerts"
+                }
+            }
+        },
+        "controllers.directionsData": {
+            "type": "object",
+            "properties": {
+                "directions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "controllers.directionsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/controllers.directionsData"
+                }
+            }
+        },
+        "controllers.linesData": {
+            "type": "object",
+            "properties": {
+                "lines": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "controllers.linesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/controllers.linesData"
+                }
+            }
+        },
+        "controllers.parkingData": {
+            "type": "object",
+            "properties": {
+                "station": {
+                    "type": "object",
+                    "$ref": "#/definitions/marta_schemas.Station"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.parkingResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.parkingData"
+                    }
+                }
+            }
+        },
         "controllers.response": {
             "type": "object",
             "properties": {
@@ -69,6 +343,91 @@
                 "station": {
                     "type": "object",
                     "$ref": "#/definitions/marta_schemas.Station"
+                }
+            }
+        },
+        "controllers.stationsData": {
+            "type": "object",
+            "properties": {
+                "stations": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "controllers.stationsLocationResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/marta_schemas.StationLocation"
+                    }
+                }
+            }
+        },
+        "controllers.stationsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "$ref": "#/definitions/controllers.stationsData"
+                }
+            }
+        },
+        "marta_schemas.Alerts": {
+            "type": "object",
+            "properties": {
+                "bus": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "desc": {
+                                "type": "string"
+                            },
+                            "expires": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "text": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "rail": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "desc": {
+                                "type": "string"
+                            },
+                            "expires": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "text": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "text": {
+                    "type": "string"
                 }
             }
         },
@@ -108,6 +467,20 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "marta_schemas.StationLocation": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "type": "number"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "station_name": {
                     "type": "string"
                 }
             }
