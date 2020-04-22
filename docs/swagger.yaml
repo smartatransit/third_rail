@@ -1,4 +1,51 @@
 definitions:
+  controllers.alertResponse:
+    properties:
+      data:
+        $ref: '#/definitions/marta_schemas.Alerts'
+        type: object
+    type: object
+  controllers.directionsData:
+    properties:
+      directions:
+        items:
+          type: string
+        type: array
+    type: object
+  controllers.directionsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controllers.directionsData'
+        type: object
+    type: object
+  controllers.linesData:
+    properties:
+      lines:
+        items:
+          type: string
+        type: array
+    type: object
+  controllers.linesResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controllers.linesData'
+        type: object
+    type: object
+  controllers.parkingData:
+    properties:
+      station:
+        $ref: '#/definitions/marta_schemas.Station'
+        type: object
+      status:
+        type: string
+    type: object
+  controllers.parkingResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/controllers.parkingData'
+        type: array
+    type: object
   controllers.response:
     properties:
       data:
@@ -14,6 +61,61 @@ definitions:
       station:
         $ref: '#/definitions/marta_schemas.Station'
         type: object
+    type: object
+  controllers.stationsData:
+    properties:
+      stations:
+        items:
+          type: string
+        type: array
+    type: object
+  controllers.stationsLocationResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/marta_schemas.StationLocation'
+        type: array
+    type: object
+  controllers.stationsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controllers.stationsData'
+        type: object
+    type: object
+  marta_schemas.Alerts:
+    properties:
+      bus:
+        items:
+          properties:
+            desc:
+              type: string
+            expires:
+              type: string
+            id:
+              type: string
+            text:
+              type: string
+            title:
+              type: string
+          type: object
+        type: array
+      rail:
+        items:
+          properties:
+            desc:
+              type: string
+            expires:
+              type: string
+            id:
+              type: string
+            text:
+              type: string
+            title:
+              type: string
+          type: object
+        type: array
+      text:
+        type: string
     type: object
   marta_schemas.Schedule:
     properties:
@@ -41,7 +143,16 @@ definitions:
       name:
         type: string
     type: object
-host: http://third-rail-secure.services.ataper.net
+  marta_schemas.StationLocation:
+    properties:
+      distance:
+        type: number
+      location:
+        type: string
+      station_name:
+        type: string
+    type: object
+host: third-rail.services.ataper.net
 info:
   contact:
     email: smartatransit@gmail.com
@@ -53,11 +164,24 @@ info:
   title: SMARTA API
   version: "1.0"
 paths:
+  /live/alerts:
+    get:
+      description: MARTA alerts sourced from their official twitter account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.alertResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Alerts from various MARTA sources
   /live/schedule/line/{line}:
     get:
-      description: Given a line, return the current schedule
+      description: Given a line, return the current live schedule
       parameters:
-      - description: Line
+      - description: RED, GOLD, BLUE, GREEN
         in: path
         name: line
         required: true
@@ -72,6 +196,115 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get Schedule By Line
+  /live/schedule/station/{station}:
+    get:
+      description: Given a station, return the current live schedule
+      parameters:
+      - description: 'TODO: Enter all stations as enum?'
+        in: path
+        name: station
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Schedule By Station
+  /smart/parking:
+    get:
+      description: Get available parking information as informed by twitter
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.parkingResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Parking Information
+  /static/directions:
+    get:
+      description: Get all available directions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.directionsResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Directions
+  /static/lines:
+    get:
+      description: Get all available lines
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.linesResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Lines
+  /static/location:
+    get:
+      description: Get nearest station given a lat and lng
+      parameters:
+      - description: Latitude
+        in: query
+        name: latitutde
+        required: true
+        type: integer
+      - description: Longitude
+        in: query
+        name: longitude
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.stationsLocationResponse'
+        "400": {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get nearest station given a lat and lng
+  /static/schedule/station:
+    get:
+      description: Get MARTA's scheduled times for arrival for all stations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Static Schedule By Station
+  /static/stations:
+    get:
+      description: Get all available stations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.stationsResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Stations
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -199,3 +199,6 @@ container-clean:
 
 bin-clean:
 	rm -rf .go bin
+
+docs:
+	swag init --dir ./cmd/third_rail/ --parseDependency
