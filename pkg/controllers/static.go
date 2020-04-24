@@ -2,15 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/smartatransit/third_rail/pkg/transformers"
-	"github.com/smartatransit/third_rail/pkg/validators"
 	"net/http"
 	"strconv"
+
+	"github.com/smartatransit/third_rail/pkg/transformers"
+	"github.com/smartatransit/third_rail/pkg/validators"
 )
 
 type StaticController struct {
 }
 
+// GetStaticScheduleByStation godoc
+// @Summary Get Static Schedule By Station
+// @Description Get MARTA's scheduled times for arrival for all stations
+// @Produce  json
+// @Success 200 {object} response
+// @Router /static/schedule/station [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()
@@ -26,6 +34,13 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 	json.NewEncoder(w).Encode(response{})
 }
 
+// GetLines godoc
+// @Summary Get Lines
+// @Description Get all available lines
+// @Produce  json
+// @Success 200 {object} linesResponse
+// @Router /static/lines [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
@@ -36,6 +51,13 @@ func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Req
 	json.NewEncoder(w).Encode(response)
 }
 
+// GetDirections godoc
+// @Summary Get Directions
+// @Description Get all available directions
+// @Produce  json
+// @Success 200 {object} directionsResponse
+// @Router /static/directions [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetDirections(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
@@ -46,6 +68,13 @@ func (controller StaticController) GetDirections(w http.ResponseWriter, req *htt
 	json.NewEncoder(w).Encode(response)
 }
 
+// GetStations godoc
+// @Summary Get Stations
+// @Description Get all available stations
+// @Produce  json
+// @Success 200 {object} stationsResponse
+// @Router /static/stations [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetStations(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	mev := validators.NewMartaEntitiesValidator()
@@ -56,6 +85,16 @@ func (controller StaticController) GetStations(w http.ResponseWriter, req *http.
 	json.NewEncoder(w).Encode(response)
 }
 
+// GetLocations godoc
+// @Summary Get nearest station given a lat and lng
+// @Description Get nearest station given a lat and lng
+// @Produce  json
+// @Param latitutde query int true "Latitude"
+// @Param longitude query int true "Longitude"
+// @Failure 400
+// @Success 200 {object} stationsLocationResponse
+// @Router /static/location [get]
+// @Security ApiKeyAuth
 func (controller StaticController) GetLocations(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()
