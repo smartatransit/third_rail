@@ -1,11 +1,9 @@
 package validators
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/thoas/go-funk"
-	"io/ioutil"
 	"strings"
 )
 
@@ -30,12 +28,7 @@ type MartaEntitiesValidator struct {
 
 func NewMartaEntitiesValidator() (mev MartaEntitiesValidator) {
 	mev = MartaEntitiesValidator{}
-	file, _ := ioutil.ReadFile("data/schemas/entities.json")
-	err := json.Unmarshal([]byte(file), &mev.Entities)
-
-	if err != nil {
-		panic("Holy shit we can't find the entities file panic panic panic")
-	}
+	mev.Entities = entities
 
 	return
 }
