@@ -8,7 +8,7 @@ with analysis of historic patterns, static schedule data, and external sources l
 ## Continuous Integration Status
 
 [![Build Status](https://travis-ci.com/smartatransit/third_rail.svg?branch=master)](https://travis-ci.com/smartatransit/third_rail)
-[![codecov](https://codecov.io/gh/smartatransit/smarta-api/branch/master/graph/badge.svg)](https://codecov.io/gh/smartatransit/smarta-api)
+[![codecov](https://codecov.io/gh/smartatransit/third_rail/branch/master/graph/badge.svg)](https://codecov.io/gh/smartatransit/third_rail)
 
 ## Project Goals
 
