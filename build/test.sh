@@ -25,7 +25,7 @@ export GOFLAGS="-mod=vendor"
 TARGETS=$(for d in "$@"; do echo ./$d/...; done)
 
 echo "Running tests:"
-go test -v -race -coverprofile=coverage.txt -covermode=atomic -installsuffix "static" ${TARGETS}
+go test -v -coverprofile=coverage.txt -covermode=atomic -installsuffix "static" ${TARGETS}
 echo
 
 echo -n "Checking gofmt: "
