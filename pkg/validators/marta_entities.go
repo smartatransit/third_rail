@@ -28,7 +28,7 @@ type MartaEntitiesValidator struct {
 
 func NewMartaEntitiesValidator() (mev MartaEntitiesValidator) {
 	mev = MartaEntitiesValidator{}
-	mev.Entities = entities
+	mev.Entities = Aliases
 
 	return
 }

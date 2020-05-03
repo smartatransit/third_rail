@@ -1,6 +1,6 @@
 package validators
 
-var entities = MartaEntities{
+var Aliases = MartaEntities{
 	Directions: []AliasStore{
 		{
 			Name:    "North",
@@ -133,6 +133,10 @@ var entities = MartaEntities{
 		{
 			Name:    "Hamilton E Holmes Station",
 			Aliases: []string{"Hamilton E Holmes", "HAMILTON E HOLMES", "HE Holmes"},
+		},
+		{
+			Name:    "Bankhead Station",
+			Aliases: []string{"Bankhead", "BANKHEAD"},
 		},
 		{
 			Name:    "West Lake Station",

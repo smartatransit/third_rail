@@ -5,6 +5,7 @@ import (
 	"github.com/mmcloughlin/geohash"
 	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
+	"github.com/smartatransit/third_rail/pkg/transformers/transformers_data"
 	"math"
 	"os"
 	"sort"
@@ -15,13 +16,7 @@ type LocationTransformer struct {
 }
 
 func NewLocationTransformer() LocationTransformer {
-	stations, err := parseCsv("data/location/stations.csv")
-
-	if err != nil {
-		log.Fatalf("Unable to load static station data: %s", err)
-	}
-
-	return LocationTransformer{parseStationData(stations)}
+	return LocationTransformer{parseStationData(transformers_data.GeoLocations)}
 }
 
 func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []marta_schemas.StationLocation) {
@@ -38,11 +33,11 @@ func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (
 	return
 }
 
-func parseStationData(stationData [][]string) (stationLocations []marta_schemas.StationLocation) {
-	for i, _ := range stationData[0] {
+func parseStationData(stationData []transformers_data.GeoLocation) (stationLocations []marta_schemas.StationLocation) {
+	for i, _ := range stationData {
 		station := marta_schemas.StationLocation{
-			StationName: stationData[0][i],
-			Location:    stationData[1][i],
+			StationName: stationData[i].Name,
+			Location:    stationData[i].Location,
 			Distance:    0,
 		}
 		stationLocations = append(stationLocations, station)
