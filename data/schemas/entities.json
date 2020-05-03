@@ -1,0 +1,188 @@
+{
+    "stations":[
+        {
+            "name":"Doraville Station",
+            "aliases":["Doraville", "DORAVILLE"]
+        },
+        {
+            "name":"Chamblee Station",
+            "aliases":["Chamblee", "CHAMBLEE"]
+        },
+        {
+            "name":"Brookhaven Station",
+            "aliases":["Brookhaven", "Brookhaven/Oglethorpe", "BROOKHAVEN"]
+        },
+        {
+            "name":"Lenox Station",
+            "aliases":["Lenox", "LENOX"]
+        },
+        {
+            "name":"North Springs Station",
+            "aliases":["North Springs", "NORTH SPRINGS"]
+        },
+        {
+            "name":"Sandy Springs Station",
+            "aliases":["Sandy Springs", "SANDY SPRINGS"]
+        },
+        {
+            "name":"Dunwoody Station",
+            "aliases":["Dunwoody", "DUNWOODY"]
+        },
+        {
+            "name":"Medical Center Station",
+            "aliases":["Medical Center", "MEDICAL CENTER"]
+        },
+        {
+            "name":"Buckhead Station",
+            "aliases":["Buckhead", "BUCKHEAD STATION"]
+        },
+        {
+            "name":"Lindbergh Station",
+            "aliases":["Lindbergh", "Lindbergh Center", "LINDBERGH"]
+        },
+        {
+            "name":"Arts Center Station",
+            "aliases":["Arts Center", "ARTS CENTER"]
+        },
+        {
+            "name":"Midtown Station",
+            "aliases":["Midtown", "MIDTOWN"]
+        },
+        {
+            "name":"North Avenue Station",
+            "aliases":["North Avenue", "NORTH AVENUE", "NORTH AVE STATION"]
+        },
+        {
+            "name":"Civic Center Station",
+            "aliases":["Civic Center", "CIVIC CENTER"]
+        },
+        {
+            "name":"Peachtree Center Station",
+            "aliases":["Peachtree Center", "PEACHTREE CENTER"]
+        },
+        {
+            "name":"Five Points Station",
+            "aliases":["Five Points", "FIVE POINTS"]
+        },
+        {
+            "name":"Garnett Station",
+            "aliases":["Garnett", "GARNETT"]
+        },
+        {
+            "name":"West End Station",
+            "aliases":["West End", "WEST END"]
+        },
+        {
+            "name":"Oakland City Station",
+            "aliases":["Oakland City", "OAKLAND CITY"]
+        },
+        {
+            "name":"Lakewood Station",
+            "aliases":["Lakewood/Ft. McPherson", "Fort McPherson", "LAKEWOOD"]
+        },
+        {
+            "name":"East Point Station",
+            "aliases":["East Point", "EAST POINT"]
+        },
+        {
+            "name":"College Park Station",
+            "aliases":["College Park", "COLLEGE PARK"]
+        },
+        {
+            "name":"Airport Station",
+            "aliases":["Airport", "AIRPORT"]
+        },
+        {
+            "name":"Hamilton E Holmes Station",
+            "aliases":["Hamilton E Holmes", "HAMILTON E HOLMES", "HE Holmes"]
+        },
+        {
+            "name":"West Lake Station",
+            "aliases":["West Lake", "WEST LAKE"]
+        },
+        {
+            "name":"Ashby Station",
+            "aliases":["Ashby", "ASHBY"]
+        },
+        {
+            "name":"Vine City Station",
+            "aliases":["Vine Station", "VINE CITY"]
+        },
+        {
+            "name":"Omni Dome Station",
+            "aliases":["Omni Dome", "CNN", "State Farm Arena", "Mercedes Benz Stadium", "GWCC", "OMNI DOME STATION"]
+        },
+        {
+            "name":"Georgia State Station",
+            "aliases":["Georgia State", "GEORGIA STATE"]
+        },
+        {
+            "name":"King Memorial Station",
+            "aliases":["King Memorial", "KING MEMORIAL"]
+        },
+        {
+            "name":"Inman Park Station",
+            "aliases":["Inman Park", "Inman Park/Reynoldstown", "INMNAN PARK"]
+        },
+        {
+            "name":"Edgewood Candler Park Station",
+            "aliases":["Edgewood Candler Park", "EDGEWOOD CANDLER PARK"]
+        },
+        {
+            "name":"East Lake Station",
+            "aliases":["East Lake", "EAST LAKE"]
+        },
+        {
+            "name":"Decatur Station",
+            "aliases":["Decatur", "DECATUR"]
+        },
+        {
+            "name":"Avondale Station",
+            "aliases":["Avondale", "AVONDALE"]
+        },
+        {
+            "name":"Kensington Station",
+            "aliases":["Kensington", "KENSINGTON"]
+        },
+        {
+            "name":"Indian Creek Station",
+            "aliases":["Indian Creek", "INDIAN CREEK"]
+        }
+    ],
+    "lines":[
+        {
+            "name":"Gold",
+            "aliases":["G", "GOLD", "Gold Line"]
+        },
+        {
+            "name":"Red",
+            "aliases":["R", "RED", "Red Line"]
+        },
+        {
+            "name":"Blue",
+            "aliases":["B", "BLUE", "Blue Line"]
+        },
+        {
+            "name":"Green",
+            "aliases":["G", "GREEN", "Green Line"]
+        }
+    ],
+    "directions":[
+        {
+            "name":"North",
+            "aliases":["N", "NORTH", "NORTHBOUND"]
+        },
+        {
+            "name":"South",
+            "aliases":["S", "SOUTH", "SOUTHBOUND"]
+        },
+        {
+            "name":"East",
+            "aliases":["E", "EAST", "EASTBOUND"]
+        },
+        {
+            "name":"West",
+            "aliases":["W", "WEST", "WESTBOUND"]
+        }
+    ]
+}

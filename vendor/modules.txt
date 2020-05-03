@@ -1,0 +1,15 @@
+# github.com/gorilla/handlers v1.4.2
+github.com/gorilla/handlers
+# github.com/gorilla/mux v1.7.4
+github.com/gorilla/mux
+# github.com/joho/godotenv v1.3.0
+github.com/joho/godotenv
+# github.com/mailru/easyjson v0.7.0
+github.com/mailru/easyjson
+github.com/mailru/easyjson/jlexer
+github.com/mailru/easyjson/jwriter
+github.com/mailru/easyjson/buffer
+# github.com/smartatransit/gomarta v1.0.0
+github.com/smartatransit/gomarta
+# github.com/thoas/go-funk v0.5.0
+github.com/thoas/go-funk
