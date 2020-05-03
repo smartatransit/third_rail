@@ -74,6 +74,7 @@ func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 	smartController := controllers.SmartController{TwitterClient: tc}
 	smartRouter := router.PathPrefix("/smart").Subrouter()
 	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
+	smartRouter.HandleFunc("/emergencies", smartController.GetEmergencyStatus).Methods("GET")
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
