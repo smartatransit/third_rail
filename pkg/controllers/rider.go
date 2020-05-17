@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-type RiderController struct {}
+type RiderController struct{}
 
 // GetAlerts godoc
 // @Summary Get Alerts from various MARTA sources
@@ -33,14 +33,14 @@ func (controller RiderController) Migrate(db *gorm.DB, w http.ResponseWriter, re
 		Name: "Midtown Station",
 		Info: models.StationInfo{
 			Description: "Midtown Station",
-			Location: "",
+			Location:    "",
 		}})
 
 	log.Info("Created data")
 
 	// Read
 	var station models.Station
-	db.First(&station, 1) // find product with id 1
+	db.First(&station, 1)                             // find product with id 1
 	db.First(&station, "Name = ?", "Midtown Station") // find product with code l1212
 
 	log.Infof("Read data: %v", &station)
