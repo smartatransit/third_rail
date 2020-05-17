@@ -33,10 +33,20 @@ github.com/gorilla/handlers
 github.com/gorilla/mux
 # github.com/jessevdk/go-flags v1.4.0
 github.com/jessevdk/go-flags
+# github.com/jinzhu/gorm v1.9.12
+github.com/jinzhu/gorm
+github.com/jinzhu/gorm/dialects/postgres
+# github.com/jinzhu/inflection v1.0.0
+github.com/jinzhu/inflection
 # github.com/karlseguin/ccache v2.0.3+incompatible
 github.com/karlseguin/ccache
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
+# github.com/lib/pq v1.5.0
+github.com/lib/pq
+github.com/lib/pq/hstore
+github.com/lib/pq/oid
+github.com/lib/pq/scram
 # github.com/mailru/easyjson v0.7.1
 github.com/mailru/easyjson
 github.com/mailru/easyjson/jlexer
@@ -60,7 +70,7 @@ github.com/swaggo/http-swagger
 github.com/swaggo/swag
 # github.com/thoas/go-funk v0.6.0
 github.com/thoas/go-funk
-# golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+# golang.org/x/net v0.0.0-20200501053045-e0ff5e5a1de5
 golang.org/x/net/webdav
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/webdav/internal/xml
@@ -70,20 +80,21 @@ golang.org/x/net/context
 golang.org/x/oauth2
 golang.org/x/oauth2/clientcredentials
 golang.org/x/oauth2/internal
-# golang.org/x/sys v0.0.0-20200420163511-1957bb5e6d1f
+# golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3
 golang.org/x/sys/unix
+golang.org/x/sys/internal/unsafeheader
 # golang.org/x/text v0.3.2
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
 golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/transform
-# golang.org/x/tools v0.0.0-20200421185700-66008de356c7
+# golang.org/x/tools v0.0.0-20200502202811-ed308ab3e770
 golang.org/x/tools/go/loader
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo
-# google.golang.org/appengine v1.6.5
+# google.golang.org/appengine v1.6.6
 google.golang.org/appengine/urlfetch
 google.golang.org/appengine/internal
 google.golang.org/appengine/internal/urlfetch

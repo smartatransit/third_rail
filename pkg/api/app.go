@@ -1,0 +1,135 @@
+package api
+
+import (
+	"fmt"
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
+	"github.com/jessevdk/go-flags"
+	"github.com/jinzhu/gorm"
+	log "github.com/sirupsen/logrus"
+	_ "github.com/smartatransit/third_rail/docs"
+	"github.com/smartatransit/third_rail/pkg/clients"
+	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
+	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
+	"github.com/smartatransit/third_rail/pkg/controllers"
+	"github.com/smartatransit/third_rail/pkg/middleware"
+	"github.com/smartatransit/third_rail/pkg/models"
+	httpSwagger "github.com/swaggo/http-swagger"
+	"net/http"
+)
+
+type App struct {
+	Router *mux.Router
+	DB     *gorm.DB
+}
+
+var martaClient clients.MartaClient
+var twitterClient clients.TwitterClient
+
+// @title SMARTA API
+// @version 1.0
+// @description API to serve you SMARTA data
+
+// @contact.name SMARTA Support
+// @contact.email smartatransit@gmail.com
+
+// @license.name GNU General Public License v3.0
+// @license.url https://github.com/smartatransit/third_rail/blob/master/LICENSE
+
+// @host third-rail.services.ataper.net
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+func (app *App) MountAndServe() {
+	var options Options
+	_, err := flags.Parse(&options)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if martaClient == nil {
+		martaClient = marta_client.GetMartaClient(options.MartaAPIKey, options.MartaCacheTTL)
+	}
+
+	if twitterClient == nil {
+		twitterClient = twitter_client.GetTwitterClient(options.TwitterClientID, options.TwitterClientSecret, options.TwitterCacheTTL)
+	}
+
+	log.Info(options.DbHost)
+
+	dbURI := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+		options.DbHost,
+		options.DbPort,
+		options.DbUsername,
+		options.DbName,
+		options.DbPassword)
+
+	db, err := gorm.Open("postgres", dbURI)
+	if err != nil {
+		log.Fatalf("Could not connect database: %v", err)
+	}
+
+	defer db.Close()
+
+	app.DB = models.DBMigrate(db)
+	app.Router = mux.NewRouter()
+	app.mountLiveRoutes(martaClient)
+	app.mountStaticRoutes()
+	app.mountSmartRoutes(twitterClient)
+	app.mountRiderRoutes()
+	app.mountSwaggerRoutes()
+	app.serve()
+}
+
+func (app *App) mountLiveRoutes(mc clients.MartaClient) {
+	liveController := controllers.LiveController{MartaClient: mc}
+	liveRouter := app.Router.PathPrefix("/live").Subrouter()
+	liveRouter.HandleFunc("/schedule/line/{line}", liveController.GetScheduleByLine).Methods("GET")
+	liveRouter.HandleFunc("/schedule/station/{station}", liveController.GetScheduleByStation).Methods("GET")
+	liveRouter.HandleFunc("/alerts", liveController.GetAlerts).Methods("GET")
+}
+
+func (app *App) mountStaticRoutes() {
+	staticController := controllers.StaticController{}
+	staticRouter := app.Router.PathPrefix("/static").Subrouter()
+	staticRouter.HandleFunc("/schedule/station", staticController.GetStaticScheduleByStation).Methods("GET")
+	staticRouter.HandleFunc("/lines", staticController.GetLines).Methods("GET")
+	staticRouter.HandleFunc("/directions", staticController.GetDirections).Methods("GET")
+	staticRouter.HandleFunc("/stations", staticController.GetStations).Methods("GET")
+	staticRouter.HandleFunc("/stations/location", staticController.GetLocations).Methods("GET")
+}
+
+func (app *App) mountSmartRoutes(tc clients.TwitterClient) {
+	smartController := controllers.SmartController{TwitterClient: tc}
+	smartRouter := app.Router.PathPrefix("/smart").Subrouter()
+	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
+	smartRouter.HandleFunc("/emergencies", smartController.GetEmergencyStatus).Methods("GET")
+}
+
+func (app *App) mountRiderRoutes() {
+	riderController := controllers.RiderController{}
+	riderRouter := app.Router.PathPrefix("/rider").Subrouter()
+	riderRouter.HandleFunc("/alerts", func(w http.ResponseWriter, r *http.Request) {
+		riderController.GetRiderAlerts(app.DB, w, r)
+	}).Methods("GET")
+	riderRouter.HandleFunc("/migrate", func(w http.ResponseWriter, r *http.Request) {
+		riderController.Migrate(app.DB, w, r)
+	}).Methods("GET")
+}
+
+func (app *App) mountSwaggerRoutes() {
+	app.Router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+}
+
+func (app *App) serve() {
+	fmt.Println("started on port :5000")
+
+	log.Fatal(http.ListenAndServe(":5000", handlers.CORS(
+		handlers.AllowCredentials(),
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"POST", "PUT", "DELETE", "PATCH", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With"}),
+	)(middleware.SuffixMiddleware(app.Router))))
+}

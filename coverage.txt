@@ -1,0 +1,25 @@
+mode: atomic
+github.com/smartatransit/third_rail/pkg/controllers/static.go:22.105,29.47 5 0
+github.com/smartatransit/third_rail/pkg/controllers/static.go:34.2,34.39 1 0
+github.com/smartatransit/third_rail/pkg/controllers/static.go:29.47,32.3 2 0
+github.com/smartatransit/third_rail/pkg/controllers/static.go:44.87,52.2 5 1
+github.com/smartatransit/third_rail/pkg/controllers/static.go:61.92,69.2 5 1
+github.com/smartatransit/third_rail/pkg/controllers/static.go:78.90,86.2 5 1
+github.com/smartatransit/third_rail/pkg/controllers/static.go:98.91,107.37 5 1
+github.com/smartatransit/third_rail/pkg/controllers/static.go:112.2,116.37 3 1
+github.com/smartatransit/third_rail/pkg/controllers/static.go:107.37,110.3 2 0
+github.com/smartatransit/third_rail/pkg/controllers/live.go:26.94,38.64 8 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:44.2,44.33 1 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:38.64,42.3 3 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:55.97,69.70 9 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:75.2,75.33 1 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:69.70,73.3 3 1
+github.com/smartatransit/third_rail/pkg/controllers/live.go:85.86,94.2 5 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:22.94,37.40 4 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:41.2,43.37 2 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:37.40,39.3 1 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:46.96,53.40 4 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:57.2,59.37 2 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:53.40,55.3 1 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:62.64,69.2 2 1
+github.com/smartatransit/third_rail/pkg/controllers/smart.go:71.68,78.2 2 1
