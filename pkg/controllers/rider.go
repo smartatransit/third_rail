@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/models"
 	"net/http"
 )
@@ -29,7 +28,7 @@ func (controller RiderController) GetRiderAlerts(db *gorm.DB, w http.ResponseWri
 
 func (controller RiderController) Migrate(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	// Create
-	db.Create(&models.Station{
+	/*db.Create(&models.Station{
 		Name: "Midtown Station",
 		Info: models.StationInfo{
 			Description: "Midtown Station",
@@ -53,5 +52,5 @@ func (controller RiderController) Migrate(db *gorm.DB, w http.ResponseWriter, re
 	// Delete - delete product
 	//db.Delete(&station)
 
-	//log.Info("Deleted data")
+	//log.Info("Deleted data")*/
 }
