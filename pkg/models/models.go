@@ -6,34 +6,28 @@ import (
 )
 
 type Direction struct {
-	//gorm.Model
-	DirectionID uint `gorm:"primary_key:true"`
-	//Lines []Line `gorm:"many2many:line_directions;association_foreignkey:ID;foreignkey:ID"`
-	Name string `gorm:"not null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	gorm.Model
+	Lines []Line `gorm:"many2many:line_directions"`
+	Name  string `gorm:"not null"`
 }
 
 type Line struct {
-	//gorm.Model
-	LineID uint `gorm:"primary_key:true"`
-	Directions []Direction `gorm:"many2many:line_directions;association_foreignkey:DirectionID;foreignkey:LineID"`
-	Name      string      `gorm:"not null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
+	gorm.Model
+	Directions []Direction `gorm:"many2many:line_directions"`
+	Stations   []Station   `gorm:"many2man:station_lines"`
+	Name       string      `gorm:"not null"`
 }
 
 type Station struct {
 	gorm.Model
-	Name string        `gorm:"unique;not null"`
-	Info StationDetail `gorm:"foreignkey:ID"`
+	Lines []Line `gorm:"many2many:station_lines;not null"`
+	Name  string `gorm:"unique;not null"`
 }
 
 type StationDetail struct {
 	gorm.Model
-	Lines       []Line `gorm:"many2many:station_detail_lines;not null"`
+	StationID   int `gorm:"not null"`
+	Station     Station
 	Description string `gorm:"not null"`
 	Location    string `gorm:"unique;not null"`
 }
@@ -49,11 +43,19 @@ type FeedbackSource struct {
 	SourceType string
 }
 
-type StationFeedback struct {
+type Feedback struct {
 	gorm.Model
-	Source      FeedbackSource `gorm:"foreignkey:ID;not null"`
-	Type        FeedbackType   `gorm:"foreignkey:ID;not null"`
-	Description string         `gorm:"not null"`
+	StationID   int
+	Station     Station
+	LineID      int
+	Line        Line
+	DirectionID int
+	Direction   Direction
+	SourceID    int
+	Source      FeedbackSource
+	TypeID      int
+	Type        FeedbackType
+	Description string `gorm:"not null"`
 	ThumbsUp    int
 	ThumbsDown  int
 	ExpiresAt   time.Time
@@ -75,43 +77,72 @@ type ScheduleEventSource struct {
 
 type ScheduleEvent struct {
 	gorm.Model
-	EventType   ScheduleEventSource `gorm:"foreignkey:ID"`
-	Destination Station             `gorm:"foreignkey:ID;not null"`
-	NextArrival time.Time
-	NextStation Station `gorm:"foreignkey:ID;not null"`
+	EventTypeID   int
+	EventType     ScheduleEventSource
+	DestinationID int
+	Destination   Station
+	NextArrival   time.Time
+	NextStationID int
+	NextStation   Station
 }
 
 type RealTimeEventDetail struct {
 	gorm.Model
-	ScheduleEvent  ScheduleEvent `gorm:"foreignkey:ID;not null"`
-	EventTime      time.Time
-	Train          Train  `gorm:"foreignkey:TrainID"`
-	WaitingSeconds int    `gorm:"not null"`
-	WaitingTime    string `gorm:"not null"`
+	ScheduleEventID int
+	ScheduleEvent   ScheduleEvent
+	EventTime       time.Time
+	TrainID         int
+	Train           Train
+	WaitingSeconds  int    `gorm:"not null"`
+	WaitingTime     string `gorm:"not null"`
 }
 
 type StaticEventDetail struct {
 	gorm.Model
-	ScheduleEvent      ScheduleEvent `gorm:"foreignkey:ID;not null"`
+	ScheduleEventID    int
+	ScheduleEvent      ScheduleEvent
 	ScheduledTime      time.Time
 	StaticScheduleType string `gorm:"not null"`
 }
 
 func DBMigrate(db *gorm.DB) *gorm.DB {
+	db.LogMode(false)
+
 	db.AutoMigrate(&Direction{})
 	db.AutoMigrate(&Line{})
-	//db.Model("line_directions").AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
-	//db.Model("line_directions").AddForeignKey("direction_id", "directions(id)", "RESTRICT", "RESTRICT")
+	db.Table("line_directions").AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
+	db.Table("line_directions").AddForeignKey("direction_id", "directions(id)", "RESTRICT", "RESTRICT")
 
 	db.AutoMigrate(&Station{})
 	db.AutoMigrate(&StationDetail{})
+	db.Model(&StationDetail{}).AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
+	db.Table("station_lines").AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
+	db.Table("station_lines").AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
+
 	db.AutoMigrate(&FeedbackType{})
 	db.AutoMigrate(&FeedbackSource{})
-	db.AutoMigrate(&StationFeedback{})
+	db.AutoMigrate(&Feedback{})
+	db.Model(&Feedback{}).AddForeignKey("source_id", "feedback_sources(id)", "RESTRICT", "RESTRICT")
+	db.Model(&Feedback{}).AddForeignKey("type_id", "feedback_types(id)", "RESTRICT", "RESTRICT")
+	db.Model(&Feedback{}).AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
+	db.Model(&Feedback{}).AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
+	db.Model(&Feedback{}).AddForeignKey("direction_id", "directions(id)", "RESTRICT", "RESTRICT")
+
+
 	db.AutoMigrate(&Train{})
+
 	db.AutoMigrate(&ScheduleEventSource{})
 	db.AutoMigrate(&ScheduleEvent{})
+	db.Model(&ScheduleEvent{}).AddForeignKey("event_type_id", "schedule_event_sources(id)", "RESTRICT", "RESTRICT")
+	db.Model(&ScheduleEvent{}).AddForeignKey("destination_id", "stations(id)", "RESTRICT", "RESTRICT")
+	db.Model(&ScheduleEvent{}).AddForeignKey("next_station_id", "stations(id)", "RESTRICT", "RESTRICT")
+
 	db.AutoMigrate(&RealTimeEventDetail{})
+	db.AutoMigrate(&RealTimeEventDetail{}).AddForeignKey("schedule_event_id", "schedule_events(id)", "RESTRICT", "RESTRICT")
+	db.AutoMigrate(&RealTimeEventDetail{}).AddForeignKey("train_id", "trains(train_id)", "RESTRICT", "RESTRICT")
+
 	db.AutoMigrate(&StaticEventDetail{})
+	db.AutoMigrate(&StaticEventDetail{}).AddForeignKey("schedule_event_id", "schedule_events(id)", "RESTRICT", "RESTRICT")
+
 	return db
 }
