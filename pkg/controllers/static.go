@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/jinzhu/gorm"
+	"github.com/smartatransit/third_rail/pkg/models"
 	"net/http"
 	"strconv"
 
 	"github.com/smartatransit/third_rail/pkg/transformers"
-	"github.com/smartatransit/third_rail/pkg/validators"
 )
 
 type StaticController struct {
@@ -41,11 +42,11 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 // @Success 200 {object} linesResponse
 // @Router /static/lines [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLines(db *gorm.DB,  w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	lines, _ := mev.GetEntities(validators.MARTA_LINES)
 
+	var lines []models.Line
+	db.Find(&lines)
 	response := linesResponse{linesData{Lines: lines}}
 
 	json.NewEncoder(w).Encode(response)
@@ -58,10 +59,11 @@ func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Req
 // @Success 200 {object} directionsResponse
 // @Router /static/directions [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetDirections(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	directions, _ := mev.GetEntities(validators.MARTA_DIRECTIONS)
+
+	var directions []models.Direction
+	db.Find(&directions)
 
 	response := directionsResponse{directionsData{Directions: directions}}
 
@@ -75,10 +77,12 @@ func (controller StaticController) GetDirections(w http.ResponseWriter, req *htt
 // @Success 200 {object} stationsResponse
 // @Router /static/stations [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetStations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	stations, _ := mev.GetEntities(validators.MARTA_STATIONS)
+
+	var stations []models.Station
+	//db.Preload("Lines").Find(&stations)
+	db.Find(&stations)
 
 	response := stationsResponse{stationsData{Stations: stations}}
 

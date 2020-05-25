@@ -28,7 +28,8 @@ func (controller RiderController) GetRiderAlerts(db *gorm.DB, w http.ResponseWri
 
 func (controller RiderController) Migrate(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	// Create
-	/*db.Create(&models.Station{
+	/*
+	db.Create(&models.Station{
 		Name: "Midtown Station",
 		Info: models.StationInfo{
 			Description: "Midtown Station",

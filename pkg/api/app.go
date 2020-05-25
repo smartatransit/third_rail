@@ -14,6 +14,7 @@ import (
 	"github.com/smartatransit/third_rail/pkg/controllers"
 	"github.com/smartatransit/third_rail/pkg/middleware"
 	"github.com/smartatransit/third_rail/pkg/models"
+	"github.com/smartatransit/third_rail/pkg/seed"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 )
@@ -74,6 +75,9 @@ func (app *App) MountAndServe() {
 	defer db.Close()
 
 	app.DB = models.DBMigrate(db)
+
+	seed.Seed(db)
+
 	app.Router = mux.NewRouter()
 	app.mountLiveRoutes(martaClient)
 	app.mountStaticRoutes()
@@ -95,9 +99,15 @@ func (app *App) mountStaticRoutes() {
 	staticController := controllers.StaticController{}
 	staticRouter := app.Router.PathPrefix("/static").Subrouter()
 	staticRouter.HandleFunc("/schedule/station", staticController.GetStaticScheduleByStation).Methods("GET")
-	staticRouter.HandleFunc("/lines", staticController.GetLines).Methods("GET")
-	staticRouter.HandleFunc("/directions", staticController.GetDirections).Methods("GET")
-	staticRouter.HandleFunc("/stations", staticController.GetStations).Methods("GET")
+	staticRouter.HandleFunc("/lines", func(w http.ResponseWriter, r *http.Request){
+		staticController.GetLines(app.DB, w, r)
+	}).Methods("GET")
+	staticRouter.HandleFunc("/directions", func(w http.ResponseWriter, r *http.Request){
+		staticController.GetDirections(app.DB, w, r)
+	}).Methods("GET")
+	staticRouter.HandleFunc("/stations", func(w http.ResponseWriter, r *http.Request) {
+		staticController.GetStations(app.DB, w, r)
+	}).Methods("GET")
 	staticRouter.HandleFunc("/stations/location", staticController.GetLocations).Methods("GET")
 }
 

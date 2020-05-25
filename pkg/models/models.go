@@ -20,14 +20,14 @@ type Line struct {
 
 type Station struct {
 	gorm.Model
+	Detail StationDetail
 	Lines []Line `gorm:"many2many:station_lines;not null"`
 	Name  string `gorm:"unique;not null"`
 }
 
 type StationDetail struct {
 	gorm.Model
-	StationID   int `gorm:"not null"`
-	Station     Station
+	StationID   uint `gorm:"not null"`
 	Description string `gorm:"not null"`
 	Location    string `gorm:"unique;not null"`
 }
@@ -144,5 +144,5 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&StaticEventDetail{})
 	db.AutoMigrate(&StaticEventDetail{}).AddForeignKey("schedule_event_id", "schedule_events(id)", "RESTRICT", "RESTRICT")
 
-	return db
+	return db.Set("gorm:auto_preload", true)
 }

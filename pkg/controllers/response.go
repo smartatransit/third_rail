@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/smartatransit/third_rail/pkg/models"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 )
 
@@ -18,7 +19,7 @@ type linesResponse struct {
 }
 
 type linesData struct {
-	Lines []string `json:"lines"`
+	Lines []models.Line `json:"lines"`
 }
 
 type stationsResponse struct {
@@ -26,7 +27,7 @@ type stationsResponse struct {
 }
 
 type stationsData struct {
-	Stations []string `json:"stations"`
+	Stations []models.Station `json:"stations"`
 }
 
 type directionsResponse struct {
@@ -34,7 +35,7 @@ type directionsResponse struct {
 }
 
 type directionsData struct {
-	Directions []string `json:"directions"`
+	Directions []models.Direction `json:"directions"`
 }
 
 type stationsLocationResponse struct {
