@@ -7,12 +7,14 @@ import (
 
 type Direction struct {
 	gorm.Model
-	Lines []Line `gorm:"many2many:line_directions"`
-	Name  string `gorm:"not null"`
+	Feedback []Feedback
+	Lines    []Line `gorm:"many2many:line_directions"`
+	Name     string `gorm:"not null"`
 }
 
 type Line struct {
 	gorm.Model
+	Feedback   []Feedback `json:",omitempty"`
 	Directions []Direction `gorm:"many2many:line_directions"`
 	Stations   []Station   `gorm:"many2man:station_lines"`
 	Name       string      `gorm:"not null"`
@@ -20,14 +22,15 @@ type Line struct {
 
 type Station struct {
 	gorm.Model
-	Detail StationDetail
-	Lines []Line `gorm:"many2many:station_lines;not null"`
-	Name  string `gorm:"unique;not null"`
+	Feedback []Feedback
+	Detail   StationDetail
+	Lines    []Line `gorm:"many2many:station_lines;not null"`
+	Name     string `gorm:"unique;not null"`
 }
 
 type StationDetail struct {
 	gorm.Model
-	StationID   uint `gorm:"not null"`
+	StationID   uint   `gorm:"not null"`
 	Description string `gorm:"not null"`
 	Location    string `gorm:"unique;not null"`
 }
@@ -46,11 +49,8 @@ type FeedbackSource struct {
 type Feedback struct {
 	gorm.Model
 	StationID   int
-	Station     Station
 	LineID      int
-	Line        Line
 	DirectionID int
-	Direction   Direction
 	SourceID    int
 	Source      FeedbackSource
 	TypeID      int
@@ -127,7 +127,6 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 	db.Model(&Feedback{}).AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
 	db.Model(&Feedback{}).AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
 	db.Model(&Feedback{}).AddForeignKey("direction_id", "directions(id)", "RESTRICT", "RESTRICT")
-
 
 	db.AutoMigrate(&Train{})
 
