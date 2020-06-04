@@ -41,7 +41,7 @@ BASEIMAGE ?= gcr.io/distroless/static
 IMAGE := $(REGISTRY)/$(BIN)
 TAG := build-$(TRAVIS_BUILD_NUMBER)
 
-BUILD_IMAGE ?= golang:1.13-alpine
+BUILD_IMAGE ?= golang:buster #golang:1.13-alpine
 
 # If you want to build all binaries, see the 'all-build' rule.
 # If you want to build all containers, see the 'all-container' rule.

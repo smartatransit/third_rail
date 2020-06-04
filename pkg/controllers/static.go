@@ -32,7 +32,7 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 		return
 	}
 
-	json.NewEncoder(w).Encode(response{})
+	json.NewEncoder(w).Encode(Response{})
 }
 
 // GetLines godoc
@@ -42,12 +42,12 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 // @Success 200 {object} linesResponse
 // @Router /static/lines [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetLines(db *gorm.DB,  w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLines(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var lines []models.Line
 	db.Find(&lines)
-	response := linesResponse{linesData{Lines: lines}}
+	response := LinesResponse{linesData{Lines: lines}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -65,7 +65,7 @@ func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWri
 	var directions []models.Direction
 	db.Find(&directions)
 
-	response := directionsResponse{directionsData{Directions: directions}}
+	response := DirectionsResponse{directionsData{Directions: directions}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -84,7 +84,7 @@ func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWrite
 	//db.Preload("Lines").Find(&stations)
 	db.Find(&stations)
 
-	response := stationsResponse{stationsData{Stations: stations}}
+	response := StationsResponse{stationsData{Stations: stations}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -115,7 +115,7 @@ func (controller StaticController) GetLocations(w http.ResponseWriter, req *http
 
 	lt := transformers.NewLocationTransformer()
 
-	response := stationsLocationResponse{lt.GetNearestLocations(lat, long)}
+	response := StationsLocationResponse{lt.GetNearestLocations(lat, long)}
 
 	json.NewEncoder(w).Encode(response)
 }

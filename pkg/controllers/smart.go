@@ -38,7 +38,7 @@ func (controller SmartController) GetParkingStatus(w http.ResponseWriter, req *h
 		parkingUpdates[i] = parkingData{Status: tweet.FullText}
 	}
 
-	response := parkingResponse{parkingUpdates}
+	response := ParkingResponse{parkingUpdates}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -54,7 +54,7 @@ func (controller SmartController) GetEmergencyStatus(w http.ResponseWriter, req 
 		parkingUpdates[i] = parkingData{Status: tweet.FullText}
 	}
 
-	response := parkingResponse{parkingUpdates}
+	response := ParkingResponse{parkingUpdates}
 
 	json.NewEncoder(w).Encode(response)
 }

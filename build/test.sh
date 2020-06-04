@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright 2016 The Kubernetes Authors.
 #
@@ -18,7 +18,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-export CGO_ENABLED=0
+export CGO_ENABLED=1
 export GO111MODULE=on
 export GOFLAGS="-mod=vendor"
 

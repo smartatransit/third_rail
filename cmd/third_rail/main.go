@@ -1,10 +1,19 @@
 package main
 
 import (
+	"github.com/jessevdk/go-flags"
+	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/api"
 )
 
 func main() {
-	app := &api.App{}
-	app.MountAndServe()
+	var options api.Options
+	_, err := flags.Parse(&options)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	app := &api.App{Options: options}
+	app.Start(true, nil)
 }

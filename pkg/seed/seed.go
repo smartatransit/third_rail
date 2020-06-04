@@ -47,6 +47,7 @@ func Seed(db *gorm.DB) {
 	_ = UpsertStation(db, "Kensington", "dnh04u1s7ycg", "Kensington Station", []models.Line{blue})
 	_ = UpsertStation(db, "Avondale", "dnh04heebfzp", "Avondale Station", []models.Line{blue})
 	_ = UpsertStation(db, "Decatur", "dnh01u9cru4h", "Decatur Station", []models.Line{blue})
+	_ = UpsertStation(db, "East Lake", "dnh016v1ynv9", "East Lake Station", []models.Line{blue})
 	_ = UpsertStation(db, "West Lake", "dn5bn2sgc1bc", "West Lake Station", []models.Line{blue})
 	_ = UpsertStation(db, "H. E. Holmes", "dn5bjbfgcmr3", "Hamilton E. Holmes Station", []models.Line{blue})
 
@@ -90,7 +91,7 @@ func UpsertDirection(db *gorm.DB, name string) models.Direction {
 func UpsertLine(db *gorm.DB, name string, directions []models.Direction) models.Line {
 	var line models.Line
 	db.FirstOrCreate(&line, &models.Line{
-		Name:       name,
+		Name: name,
 	})
 	db.Model(&line).Association("Directions").Append(directions)
 
@@ -100,15 +101,15 @@ func UpsertLine(db *gorm.DB, name string, directions []models.Direction) models.
 func UpsertStation(db *gorm.DB, name, location, description string, lines []models.Line) models.Station {
 	var station models.Station
 	db.FirstOrCreate(&station, &models.Station{
-		Name:  name,
+		Name: name,
 	})
 	db.Model(&station).Association("Lines").Append(lines)
 
 	var stationDetail models.StationDetail
 	db.FirstOrCreate(&stationDetail, &models.StationDetail{
-		StationID: station.ID,
+		StationID:   station.ID,
 		Description: description,
-		Location: location,
+		Location:    location,
 	})
 
 	return station

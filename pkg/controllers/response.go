@@ -5,7 +5,7 @@ import (
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 )
 
-type response struct {
+type Response struct {
 	Data []responseData `json:"data"`
 }
 
@@ -14,7 +14,7 @@ type responseData struct {
 	Station  marta_schemas.Station  `json:"station"`
 }
 
-type linesResponse struct {
+type LinesResponse struct {
 	Data linesData `json:"data"`
 }
 
@@ -22,7 +22,7 @@ type linesData struct {
 	Lines []models.Line `json:"lines"`
 }
 
-type stationsResponse struct {
+type StationsResponse struct {
 	Data stationsData `json:"data"`
 }
 
@@ -30,7 +30,7 @@ type stationsData struct {
 	Stations []models.Station `json:"stations"`
 }
 
-type directionsResponse struct {
+type DirectionsResponse struct {
 	Data directionsData `json:"data"`
 }
 
@@ -38,7 +38,7 @@ type directionsData struct {
 	Directions []models.Direction `json:"directions"`
 }
 
-type stationsLocationResponse struct {
+type StationsLocationResponse struct {
 	Data []marta_schemas.StationLocation `json:"data"`
 }
 
@@ -47,10 +47,10 @@ type parkingData struct {
 	Status  string                `json:"status"`
 }
 
-type parkingResponse struct {
+type ParkingResponse struct {
 	Data []parkingData `json:"data"`
 }
 
-type alertResponse struct {
+type AlertResponse struct {
 	Data marta_schemas.Alerts `json:"data"`
 }

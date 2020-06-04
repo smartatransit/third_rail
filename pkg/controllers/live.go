@@ -33,7 +33,7 @@ func (controller LiveController) GetScheduleByLine(w http.ResponseWriter, req *h
 	mev := validators.NewMartaEntitiesValidator()
 	eventTransformer := transformers.NewEventTransformer(mev)
 
-	var resp response
+	var resp Response
 
 	for _, event := range transformers.FilterByLine(events, line) {
 		schedule := eventTransformer.GetSchedule(event)
@@ -64,7 +64,7 @@ func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req
 	mev := validators.NewMartaEntitiesValidator()
 	eventTransformer := transformers.NewEventTransformer(mev)
 
-	var resp response
+	var resp Response
 
 	for _, event := range transformers.FilterByStation(events, station) {
 		schedule := eventTransformer.GetSchedule(event)
@@ -87,7 +87,7 @@ func (controller LiveController) GetAlerts(w http.ResponseWriter, req *http.Requ
 
 	alerts, _ := controller.MartaClient.GetAlerts()
 
-	var resp alertResponse
+	var resp AlertResponse
 	resp.Data = alerts
 
 	json.NewEncoder(w).Encode(resp)

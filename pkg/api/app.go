@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/jessevdk/go-flags"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	_ "github.com/smartatransit/third_rail/docs"
@@ -20,12 +19,12 @@ import (
 )
 
 type App struct {
-	Router *mux.Router
-	DB     *gorm.DB
+	Router        *mux.Router
+	DB            *gorm.DB
+	MartaClient   clients.MartaClient
+	TwitterClient clients.TwitterClient
+	Options       Options
 }
-
-var martaClient clients.MartaClient
-var twitterClient clients.TwitterClient
 
 // @title SMARTA API
 // @version 1.0
@@ -42,67 +41,72 @@ var twitterClient clients.TwitterClient
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-func (app *App) MountAndServe() {
-	var options Options
-	_, err := flags.Parse(&options)
+func (app *App) Start(bootstrap bool, customRouter func()) {
+	if app.DB == nil {
+		dbURI := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+			app.Options.DbHost,
+			app.Options.DbPort,
+			app.Options.DbUsername,
+			app.Options.DbName,
+			app.Options.DbPassword)
 
-	if err != nil {
-		log.Fatal(err)
+		var err error
+		app.DB, err = gorm.Open("postgres", dbURI)
+
+		if err != nil {
+			log.Fatalf("Could not connect database: %v", err)
+		}
 	}
 
-	if martaClient == nil {
-		martaClient = marta_client.GetMartaClient(options.MartaAPIKey, options.MartaCacheTTL)
+	if bootstrap {
+		app.DB = models.DBMigrate(app.DB)
+		seed.Seed(app.DB)
 	}
 
-	if twitterClient == nil {
-		twitterClient = twitter_client.GetTwitterClient(options.TwitterClientID, options.TwitterClientSecret, options.TwitterCacheTTL)
+	//defer app.DB.Close()
+
+	if customRouter != nil {
+		customRouter()
+	} else {
+		if app.MartaClient == nil {
+			app.MartaClient = marta_client.GetMartaClient(app.Options.MartaAPIKey, app.Options.MartaCacheTTL)
+		}
+
+		if app.TwitterClient == nil {
+			app.TwitterClient = twitter_client.GetTwitterClient(app.Options.TwitterClientID, app.Options.TwitterClientSecret, app.Options.TwitterCacheTTL)
+		}
+
+		app.Router = mux.NewRouter()
+		app.mountLiveRoutes()
+		app.MountStaticRoutes()
+		app.mountSmartRoutes()
+		app.mountRiderRoutes()
+		app.mountSwaggerRoutes()
+
+		app.serve()
 	}
-
-	log.Info(options.DbHost)
-
-	dbURI := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-		options.DbHost,
-		options.DbPort,
-		options.DbUsername,
-		options.DbName,
-		options.DbPassword)
-
-	db, err := gorm.Open("postgres", dbURI)
-	if err != nil {
-		log.Fatalf("Could not connect database: %v", err)
-	}
-
-	defer db.Close()
-
-	app.DB = models.DBMigrate(db)
-
-	seed.Seed(db)
-
-	app.Router = mux.NewRouter()
-	app.mountLiveRoutes(martaClient)
-	app.mountStaticRoutes()
-	app.mountSmartRoutes(twitterClient)
-	app.mountRiderRoutes()
-	app.mountSwaggerRoutes()
-	app.serve()
 }
 
-func (app *App) mountLiveRoutes(mc clients.MartaClient) {
-	liveController := controllers.LiveController{MartaClient: mc}
+func (app *App) mountLiveRoutes() {
+	if app.MartaClient == nil {
+		log.Fatal("No MARTA client present - unable to mount Live routes.")
+	}
+
+	liveController := controllers.LiveController{MartaClient: app.MartaClient}
 	liveRouter := app.Router.PathPrefix("/live").Subrouter()
 	liveRouter.HandleFunc("/schedule/line/{line}", liveController.GetScheduleByLine).Methods("GET")
 	liveRouter.HandleFunc("/schedule/station/{station}", liveController.GetScheduleByStation).Methods("GET")
 	liveRouter.HandleFunc("/alerts", liveController.GetAlerts).Methods("GET")
 }
 
-func (app *App) mountStaticRoutes() {
+func (app *App) MountStaticRoutes() {
 	staticController := controllers.StaticController{}
 	staticRouter := app.Router.PathPrefix("/static").Subrouter()
 	staticRouter.HandleFunc("/schedule/station", staticController.GetStaticScheduleByStation).Methods("GET")
-	staticRouter.HandleFunc("/lines", func(w http.ResponseWriter, r *http.Request){
+	staticRouter.HandleFunc("/lines", func(w http.ResponseWriter, r *http.Request) {
 		staticController.GetLines(app.DB, w, r)
 	}).Methods("GET")
-	staticRouter.HandleFunc("/directions", func(w http.ResponseWriter, r *http.Request){
+	staticRouter.HandleFunc("/directions", func(w http.ResponseWriter, r *http.Request) {
 		staticController.GetDirections(app.DB, w, r)
 	}).Methods("GET")
 	staticRouter.HandleFunc("/stations", func(w http.ResponseWriter, r *http.Request) {
@@ -111,8 +115,12 @@ func (app *App) mountStaticRoutes() {
 	staticRouter.HandleFunc("/stations/location", staticController.GetLocations).Methods("GET")
 }
 
-func (app *App) mountSmartRoutes(tc clients.TwitterClient) {
-	smartController := controllers.SmartController{TwitterClient: tc}
+func (app *App) mountSmartRoutes() {
+	if app.TwitterClient == nil {
+		log.Fatal("No Twitter client present - unable to mount Smart routes.")
+	}
+
+	smartController := controllers.SmartController{TwitterClient: app.TwitterClient}
 	smartRouter := app.Router.PathPrefix("/smart").Subrouter()
 	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
 	smartRouter.HandleFunc("/emergencies", smartController.GetEmergencyStatus).Methods("GET")
