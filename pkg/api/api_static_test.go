@@ -34,6 +34,25 @@ func TestStaticController_GetLocations(t *testing.T) {
 	assert.Equal(t, 707.7872501578765, parsedResponse.Data[0].Detail.Distance, "Expected a distance of 707.78")
 }
 
+func TestStaticController_GetLocations_Bad_Params(t *testing.T) {
+	app := setUpStaticAPI(t)
+
+	request, _ := http.NewRequest("GET", "/static/stations/location", nil)
+	query := request.URL.Query()
+	query.Add("latitude", "not_lat")
+	query.Add("longitude", "not_long")
+	request.URL.RawQuery = query.Encode()
+
+	response := httptest.NewRecorder()
+	app.Router.ServeHTTP(response, request)
+
+	parsedResponse := controllers.StationsLocationResponse{}
+
+	_ = json.NewDecoder(response.Body).Decode(&parsedResponse)
+
+	assert.Equal(t, http.StatusUnprocessableEntity, response.Code, "OK response is expected")
+}
+
 func TestStaticController_GetStations(t *testing.T) {
 	app := setUpStaticAPI(t)
 

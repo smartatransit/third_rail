@@ -14,9 +14,11 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 
 	db.AutoMigrate(&Station{})
 	db.AutoMigrate(&StationDetail{})
+	db.AutoMigrate(&StationAlias{})
 	db.Model(&StationDetail{}).AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
 	db.Table("station_lines").AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
 	db.Table("station_lines").AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
+	db.Model(&StationAlias{}).AddForeignKey("station_detail_id", "station_details(id)", "RESTRICT", "RESTRICT")
 
 	db.AutoMigrate(&FeedbackType{})
 	db.AutoMigrate(&FeedbackSource{})

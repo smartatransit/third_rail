@@ -134,9 +134,6 @@ func (app *App) mountRiderRoutes() {
 	riderRouter.HandleFunc("/alerts", func(w http.ResponseWriter, r *http.Request) {
 		riderController.GetRiderAlerts(app.DB, w, r)
 	}).Methods("GET")
-	riderRouter.HandleFunc("/migrate", func(w http.ResponseWriter, r *http.Request) {
-		riderController.Migrate(app.DB, w, r)
-	}).Methods("GET")
 }
 
 func (app *App) mountSwaggerRoutes() {
