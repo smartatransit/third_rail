@@ -6,4 +6,3 @@ type FeedbackType struct {
 	gorm.Model
 	Description string `gorm:"not null"`
 }
-

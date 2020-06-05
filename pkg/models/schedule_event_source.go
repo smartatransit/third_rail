@@ -7,4 +7,3 @@ type ScheduleEventSource struct {
 	Name        string `gorm:"not null"`
 	Description string `gorm:"not null"`
 }
-

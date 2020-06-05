@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-func SortStationsByDistance(latitude, longitude float64, stations []models.Station) (sortedStations []models.Station){
+func SortStationsByDistance(latitude, longitude float64, stations []models.Station) (sortedStations []models.Station) {
 	for _, locationStation := range stations {
 		stationLat, stationLong := geohash.Decode(locationStation.Detail.Location)
 		locationStation.Detail.Distance = calculateDistance(latitude, longitude, stationLat, stationLong)

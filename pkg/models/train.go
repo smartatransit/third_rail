@@ -9,4 +9,3 @@ type Train struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 }
-

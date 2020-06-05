@@ -15,4 +15,3 @@ type ScheduleEvent struct {
 	NextStationID int
 	NextStation   Station
 }
-

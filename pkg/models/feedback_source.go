@@ -7,4 +7,3 @@ type FeedbackSource struct {
 	SourceID   string
 	SourceType string
 }
-

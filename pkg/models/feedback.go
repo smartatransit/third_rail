@@ -19,4 +19,3 @@ type Feedback struct {
 	ThumbsDown  int
 	ExpiresAt   time.Time
 }
-

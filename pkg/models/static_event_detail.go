@@ -12,4 +12,3 @@ type StaticEventDetail struct {
 	ScheduledTime      time.Time
 	StaticScheduleType string `gorm:"not null"`
 }
-

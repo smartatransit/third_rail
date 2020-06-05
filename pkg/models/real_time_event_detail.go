@@ -15,4 +15,3 @@ type RealTimeEventDetail struct {
 	WaitingSeconds  int    `gorm:"not null"`
 	WaitingTime     string `gorm:"not null"`
 }
-

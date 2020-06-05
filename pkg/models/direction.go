@@ -8,4 +8,3 @@ type Direction struct {
 	Lines    []Line `gorm:"many2many:line_directions"`
 	Name     string `gorm:"not null"`
 }
-

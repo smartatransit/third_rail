@@ -9,4 +9,3 @@ type Line struct {
 	Stations   []Station   `gorm:"many2man:station_lines"`
 	Name       string      `gorm:"not null"`
 }
-
