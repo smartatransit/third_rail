@@ -99,7 +99,7 @@ func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWrite
 // @Success 200 {object} stationsLocationResponse
 // @Router /static/location [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetLocations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLocations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()
 
@@ -113,9 +113,13 @@ func (controller StaticController) GetLocations(w http.ResponseWriter, req *http
 		return
 	}
 
-	lt := transformers.NewLocationTransformer()
+	var stations []models.Station
+	//db.Preload("Lines").Find(&stations)
+	db.Find(&stations)
 
-	response := StationsLocationResponse{lt.GetNearestLocations(lat, long)}
+	sortedStations := transformers.SortStationsByDistance(lat, long, stations)
+
+	response := StationsLocationResponse{sortedStations}
 
 	json.NewEncoder(w).Encode(response)
 }

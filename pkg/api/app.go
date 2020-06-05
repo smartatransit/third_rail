@@ -112,7 +112,9 @@ func (app *App) MountStaticRoutes() {
 	staticRouter.HandleFunc("/stations", func(w http.ResponseWriter, r *http.Request) {
 		staticController.GetStations(app.DB, w, r)
 	}).Methods("GET")
-	staticRouter.HandleFunc("/stations/location", staticController.GetLocations).Methods("GET")
+	staticRouter.HandleFunc("/stations/location", func(w http.ResponseWriter, r *http.Request) {
+		staticController.GetLocations(app.DB, w, r)
+	}).Methods("GET")
 }
 
 func (app *App) mountSmartRoutes() {

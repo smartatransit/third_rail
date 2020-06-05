@@ -30,8 +30,8 @@ func TestStaticController_GetLocations(t *testing.T) {
 
 	assert.Equal(t, 200, response.Code, "OK response is expected")
 	assert.Equal(t, 38, len(parsedResponse.Data), "Expected a length of 38")
-	assert.Equal(t, "Midtown Station", parsedResponse.Data[0].StationName, "Expected closest station of Midtown Station")
-	assert.Equal(t, 707.7872501578765, parsedResponse.Data[0].Distance, "Expected a distance of 707.78")
+	assert.Equal(t, "Midtown", parsedResponse.Data[0].Name, "Expected closest station of Midtown Station")
+	assert.Equal(t, 707.7872501578765, parsedResponse.Data[0].Detail.Distance, "Expected a distance of 707.78")
 }
 
 func TestStaticController_GetStations(t *testing.T) {

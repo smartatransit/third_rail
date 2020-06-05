@@ -39,7 +39,7 @@ type directionsData struct {
 }
 
 type StationsLocationResponse struct {
-	Data []marta_schemas.StationLocation `json:"data"`
+	Data []models.Station `json:"data"`
 }
 
 type parkingData struct {
