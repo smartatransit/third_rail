@@ -2,8 +2,9 @@ package controllers
 
 import (
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gorilla/mux"
 	"github.com/smartatransit/third_rail/pkg/clients"
@@ -58,7 +59,7 @@ func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req
 	params := mux.Vars(req)
 	station := params["station"]
 
-	log.Printf("Displaying schedules for %s", station)
+	log.Infof("Displaying schedules for %s", station)
 
 	events, _ := controller.MartaClient.GetTrains()
 	mev := validators.NewMartaEntitiesValidator()
