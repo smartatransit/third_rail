@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -27,6 +26,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.SetFormatter(&log.JSONFormatter{})
 
 	if martaClient == nil {
 		martaClient = marta_client.GetMartaClient(opts.MartaAPIKey, opts.MartaCacheTTL)
@@ -78,7 +79,7 @@ func mountAndServe(mc clients.MartaClient, tc clients.TwitterClient) {
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
-	fmt.Println("started on port :5000")
+	log.Info("started on port :5000")
 
 	log.Fatal(http.ListenAndServe(":5000", handlers.CORS(
 		handlers.AllowCredentials(),
