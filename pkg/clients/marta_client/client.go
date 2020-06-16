@@ -2,13 +2,14 @@ package marta_client
 
 import (
 	"encoding/xml"
+	"io/ioutil"
+	"net/http"
+	"time"
+
 	"github.com/karlseguin/ccache"
 	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
-	"io/ioutil"
-	"net/http"
-	"time"
 )
 
 const MARTA_ALERT_ENDPOINT = "https://martaalerts.com/webdata.aspx"
@@ -35,7 +36,7 @@ func GetMartaClient(apiKey string, cacheTTL int) MartaAPIClient {
 }
 
 func (m MartaAPIClient) GetTrains() (gomarta.TrainAPIResponse, error) {
-	log.Print("Fetching trains (no cache)")
+	log.Info("Fetching trains (no cache)")
 	trains, err := m.cache.Fetch("trains", time.Second*m.cacheTTL, func() (interface{}, error) {
 		return m.client.GetTrains()
 	})
@@ -50,7 +51,7 @@ func (m MartaAPIClient) GetTrains() (gomarta.TrainAPIResponse, error) {
 func (m MartaAPIClient) GetAlerts() (marta_schemas.Alerts, error) {
 
 	alerts, err := m.cache.Fetch("trains", time.Second*m.cacheTTL, func() (interface{}, error) {
-		log.Print("Fetching alerts (no cache)")
+		log.Info("Fetching alerts (no cache)")
 		resp, err := http.Get(MARTA_ALERT_ENDPOINT)
 		if err != nil {
 			log.Fatal("Error getting response. ", err)

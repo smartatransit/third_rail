@@ -1,11 +1,12 @@
 package transformers
 
 import (
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/gomarta"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 	"github.com/smartatransit/third_rail/pkg/validators"
-	"strings"
 )
 
 type EventTransformer struct {
@@ -24,7 +25,7 @@ func (et EventTransformer) GetStation(event gomarta.Train) marta_schemas.Station
 	station, err := et.MEV.Coerce(validators.MARTA_STATIONS, event.Station)
 
 	if err != nil {
-		log.Printf("Coercion miss: %s", err)
+		log.Errorf("Coercion miss: %s", err)
 	}
 
 	return marta_schemas.Station{
@@ -38,13 +39,13 @@ func (et EventTransformer) GetSchedule(event gomarta.Train) marta_schemas.Schedu
 	destination, destErr := et.MEV.Coerce(validators.MARTA_STATIONS, event.Destination)
 
 	if destErr != nil {
-		log.Printf("Coercion miss: %s", destErr)
+		log.Errorf("Coercion miss: %s", destErr)
 	}
 
 	station, statErr := et.MEV.Coerce(validators.MARTA_STATIONS, event.Station)
 
 	if statErr != nil {
-		log.Printf("Coercion miss: %s", statErr)
+		log.Errorf("Coercion miss: %s", statErr)
 	}
 
 	return marta_schemas.Schedule{
