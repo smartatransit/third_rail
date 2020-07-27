@@ -14,6 +14,3 @@ type MartaClient interface {
 type TwitterClient interface {
 	Search(string, *twitter.SearchTweetParams) (*twitter.Search, error)
 }
-
-type DataClient interface {
-}

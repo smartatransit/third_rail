@@ -14,11 +14,11 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 
 	db.AutoMigrate(&Station{})
 	db.AutoMigrate(&StationDetail{})
-	db.AutoMigrate(&StationAlias{})
 	db.Model(&StationDetail{}).AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
 	db.Table("station_lines").AddForeignKey("line_id", "lines(id)", "RESTRICT", "RESTRICT")
 	db.Table("station_lines").AddForeignKey("station_id", "stations(id)", "RESTRICT", "RESTRICT")
-	db.Model(&StationAlias{}).AddForeignKey("station_detail_id", "station_details(id)", "RESTRICT", "RESTRICT")
+
+	db.AutoMigrate(&Alias{})
 
 	db.AutoMigrate(&FeedbackType{})
 	db.AutoMigrate(&FeedbackSource{})
@@ -39,7 +39,7 @@ func DBMigrate(db *gorm.DB) *gorm.DB {
 
 	db.AutoMigrate(&RealTimeEventDetail{})
 	db.AutoMigrate(&RealTimeEventDetail{}).AddForeignKey("schedule_event_id", "schedule_events(id)", "RESTRICT", "RESTRICT")
-	db.AutoMigrate(&RealTimeEventDetail{}).AddForeignKey("train_id", "trains(train_id)", "RESTRICT", "RESTRICT")
+	db.AutoMigrate(&RealTimeEventDetail{}).AddForeignKey("train_id", "trains(id)", "RESTRICT", "RESTRICT")
 
 	db.AutoMigrate(&StaticEventDetail{})
 	db.AutoMigrate(&StaticEventDetail{}).AddForeignKey("schedule_event_id", "schedule_events(id)", "RESTRICT", "RESTRICT")

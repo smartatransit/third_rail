@@ -11,6 +11,7 @@ import (
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
 	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
 	"github.com/smartatransit/third_rail/pkg/controllers"
+	"github.com/smartatransit/third_rail/pkg/daemons"
 	"github.com/smartatransit/third_rail/pkg/middleware"
 	"github.com/smartatransit/third_rail/pkg/models"
 	"github.com/smartatransit/third_rail/pkg/seed"
@@ -82,6 +83,10 @@ func (app *App) Start(bootstrap bool, customRouter func()) {
 		app.mountSmartRoutes()
 		app.mountRiderRoutes()
 		app.mountSwaggerRoutes()
+		app.mountAdminRoutes()
+
+		rr := daemons.RailRunner{MartaClient: app.MartaClient, DB: app.DB}
+		rr.Start()
 
 		app.serve()
 	}
@@ -122,9 +127,14 @@ func (app *App) mountSmartRoutes() {
 		log.Fatal("No Twitter client present - unable to mount Smart routes.")
 	}
 
-	smartController := controllers.SmartController{TwitterClient: app.TwitterClient}
+	smartController := controllers.SmartController{TwitterClient: app.TwitterClient, MartaClient: app.MartaClient}
 	smartRouter := app.Router.PathPrefix("/smart").Subrouter()
-	smartRouter.HandleFunc("/parking", smartController.GetParkingStatus).Methods("GET")
+	smartRouter.HandleFunc("/parking", func(w http.ResponseWriter, r *http.Request) {
+		smartController.GetParkingStatus(app.DB, w, r)
+	}).Methods("GET")
+	smartRouter.HandleFunc("/station/{id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
+		smartController.GetStationDetails(app.DB, w, r)
+	}).Methods("GET")
 	smartRouter.HandleFunc("/emergencies", smartController.GetEmergencyStatus).Methods("GET")
 }
 
@@ -134,6 +144,15 @@ func (app *App) mountRiderRoutes() {
 	riderRouter.HandleFunc("/alerts", func(w http.ResponseWriter, r *http.Request) {
 		riderController.GetRiderAlerts(app.DB, w, r)
 	}).Methods("GET")
+}
+
+func (app *App) mountAdminRoutes() {
+
+	adminController := controllers.AdminController{MartaClient: app.MartaClient, AdminKey: app.Options.AdminAPIKey}
+	adminRouter := app.Router.PathPrefix("/admin").Subrouter()
+	adminRouter.HandleFunc("/event/ingest", func(w http.ResponseWriter, r *http.Request) {
+		adminController.IngestEvent(app.DB, w, r)
+	}).Methods("POST")
 }
 
 func (app *App) mountSwaggerRoutes() {

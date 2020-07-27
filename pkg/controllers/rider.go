@@ -25,4 +25,3 @@ func (controller RiderController) GetRiderAlerts(db *gorm.DB, w http.ResponseWri
 
 	json.NewEncoder(w).Encode(station)
 }
-

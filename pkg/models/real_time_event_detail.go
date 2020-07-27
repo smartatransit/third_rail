@@ -1,17 +1,20 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type RealTimeEventDetail struct {
-	gorm.Model
-	ScheduleEventID int
-	ScheduleEvent   ScheduleEvent
+	ID              uint          `json:"-" gorm:"primary_key"`
+	ScheduleEventID uint          `json:"-"`
+	ScheduleEvent   ScheduleEvent `json:"-"`
 	EventTime       time.Time
-	TrainID         int
+	TrainID         uint `json:"-"`
 	Train           Train
 	WaitingSeconds  int    `gorm:"not null"`
 	WaitingTime     string `gorm:"not null"`
+
+	CreatedAt time.Time  `json:"-"`
+	UpdatedAt time.Time  `json:"-"`
+	DeletedAt *time.Time `json:"-" sql:"index"`
 }

@@ -11,4 +11,5 @@ type Options struct {
 	DbName              string `long:"db-name" env:"DB_NAME" description:"the name for the smarta database"`
 	DbUsername          string `long:"db-username" env:"DB_USERNAME" description:"the username for the smarta database"`
 	DbPassword          string `long:"db-password" env:"DB_PASSWORD" description:"the password for the smarta database"`
+	AdminAPIKey         string `long:"admin-api-key" env:"ADMIN_API_KEY" description:"admin api key"`
 }

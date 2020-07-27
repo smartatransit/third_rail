@@ -22,6 +22,21 @@ type linesData struct {
 	Lines []models.Line `json:"lines"`
 }
 
+type ScheduleDetail struct {
+	Event    models.ScheduleEvent        `json:"event"`
+	RealTime *models.RealTimeEventDetail `json:"real_time_detail,omitempty"`
+	Static   *models.StaticEventDetail   `json:"static_event_detail,omitempty"`
+}
+
+type StationDetails struct {
+	Station  models.Station   `json:"station"`
+	Schedule []ScheduleDetail `json:"schedule"`
+}
+
+type StationDetailsResponse struct {
+	Data StationDetails `json:"data"`
+}
+
 type StationsResponse struct {
 	Data stationsData `json:"data"`
 }
