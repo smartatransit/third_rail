@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"github.com/smartatransit/third_rail/pkg/models"
 	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
 )
 
-type response struct {
+type Response struct {
 	Data []responseData `json:"data"`
 }
 
@@ -13,32 +14,47 @@ type responseData struct {
 	Station  marta_schemas.Station  `json:"station"`
 }
 
-type linesResponse struct {
+type LinesResponse struct {
 	Data linesData `json:"data"`
 }
 
 type linesData struct {
-	Lines []string `json:"lines"`
+	Lines []models.Line `json:"lines"`
 }
 
-type stationsResponse struct {
+type ScheduleDetail struct {
+	Event    models.ScheduleEvent        `json:"event"`
+	RealTime *models.RealTimeEventDetail `json:"real_time_detail,omitempty"`
+	Static   *models.StaticEventDetail   `json:"static_event_detail,omitempty"`
+}
+
+type StationDetails struct {
+	Station  models.Station   `json:"station"`
+	Schedule []ScheduleDetail `json:"schedule"`
+}
+
+type StationDetailsResponse struct {
+	Data StationDetails `json:"data"`
+}
+
+type StationsResponse struct {
 	Data stationsData `json:"data"`
 }
 
 type stationsData struct {
-	Stations []string `json:"stations"`
+	Stations []models.Station `json:"stations"`
 }
 
-type directionsResponse struct {
+type DirectionsResponse struct {
 	Data directionsData `json:"data"`
 }
 
 type directionsData struct {
-	Directions []string `json:"directions"`
+	Directions []models.Direction `json:"directions"`
 }
 
-type stationsLocationResponse struct {
-	Data []marta_schemas.StationLocation `json:"data"`
+type StationsLocationResponse struct {
+	Data []models.Station `json:"data"`
 }
 
 type parkingData struct {
@@ -46,10 +62,10 @@ type parkingData struct {
 	Status  string                `json:"status"`
 }
 
-type parkingResponse struct {
+type ParkingResponse struct {
 	Data []parkingData `json:"data"`
 }
 
-type alertResponse struct {
+type AlertResponse struct {
 	Data marta_schemas.Alerts `json:"data"`
 }

@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/jinzhu/gorm"
+	"github.com/smartatransit/third_rail/pkg/models"
 	"net/http"
 	"strconv"
 
 	"github.com/smartatransit/third_rail/pkg/transformers"
-	"github.com/smartatransit/third_rail/pkg/validators"
 )
 
 type StaticController struct {
@@ -31,7 +32,7 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 		return
 	}
 
-	json.NewEncoder(w).Encode(response{})
+	json.NewEncoder(w).Encode(Response{})
 }
 
 // GetLines godoc
@@ -41,12 +42,12 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 // @Success 200 {object} linesResponse
 // @Router /static/lines [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLines(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	lines, _ := mev.GetEntities(validators.MARTA_LINES)
 
-	response := linesResponse{linesData{Lines: lines}}
+	var lines []models.Line
+	db.Find(&lines)
+	response := LinesResponse{linesData{Lines: lines}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -58,12 +59,13 @@ func (controller StaticController) GetLines(w http.ResponseWriter, req *http.Req
 // @Success 200 {object} directionsResponse
 // @Router /static/directions [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetDirections(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	directions, _ := mev.GetEntities(validators.MARTA_DIRECTIONS)
 
-	response := directionsResponse{directionsData{Directions: directions}}
+	var directions []models.Direction
+	db.Find(&directions)
+
+	response := DirectionsResponse{directionsData{Directions: directions}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -75,12 +77,14 @@ func (controller StaticController) GetDirections(w http.ResponseWriter, req *htt
 // @Success 200 {object} stationsResponse
 // @Router /static/stations [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetStations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	mev := validators.NewMartaEntitiesValidator()
-	stations, _ := mev.GetEntities(validators.MARTA_STATIONS)
 
-	response := stationsResponse{stationsData{Stations: stations}}
+	var stations []models.Station
+	//db.Preload("Lines").Find(&stations)
+	db.Find(&stations)
+
+	response := StationsResponse{stationsData{Stations: stations}}
 
 	json.NewEncoder(w).Encode(response)
 }
@@ -95,7 +99,7 @@ func (controller StaticController) GetStations(w http.ResponseWriter, req *http.
 // @Success 200 {object} stationsLocationResponse
 // @Router /static/location [get]
 // @Security ApiKeyAuth
-func (controller StaticController) GetLocations(w http.ResponseWriter, req *http.Request) {
+func (controller StaticController) GetLocations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	v := req.URL.Query()
 
@@ -109,9 +113,13 @@ func (controller StaticController) GetLocations(w http.ResponseWriter, req *http
 		return
 	}
 
-	lt := transformers.NewLocationTransformer()
+	var stations []models.Station
+	//db.Preload("Lines").Find(&stations)
+	db.Find(&stations)
 
-	response := stationsLocationResponse{lt.GetNearestLocations(lat, long)}
+	sortedStations := transformers.SortStationsByDistance(lat, long, stations)
+
+	response := StationsLocationResponse{sortedStations}
 
 	json.NewEncoder(w).Encode(response)
 }

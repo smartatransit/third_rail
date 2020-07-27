@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright 2016 The Kubernetes Authors.
 #
@@ -18,15 +18,22 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-export CGO_ENABLED=0
+export CGO_ENABLED=1
 export GO111MODULE=on
 export GOFLAGS="-mod=vendor"
 
 TARGETS=$(for d in "$@"; do echo ./$d/...; done)
 
 echo "Running tests:"
-go test -v -coverprofile=coverage.txt -covermode=atomic -installsuffix "static" ${TARGETS}
-echo
+#go test -v -coverprofile=coverage.txt -covermode=atomic -installsuffix "static" ${TARGETS}
+go test -v -installsuffix "static" ${TARGETS}
+
+echo "Checking code coverage:"
+{
+  go get -u github.com/ory/go-acc
+} &> /dev/null
+
+go-acc $TARGETS
 
 echo -n "Checking gofmt: "
 ERRS=$(find "$@" -type f -name \*.go | xargs gofmt -l 2>&1 || true)

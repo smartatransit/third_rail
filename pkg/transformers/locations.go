@@ -1,66 +1,24 @@
 package transformers
 
 import (
-	"encoding/csv"
 	"github.com/mmcloughlin/geohash"
-	log "github.com/sirupsen/logrus"
-	"github.com/smartatransit/third_rail/pkg/schemas/marta_schemas"
-	"github.com/smartatransit/third_rail/pkg/transformers/transformers_data"
+	"github.com/smartatransit/third_rail/pkg/models"
 	"math"
-	"os"
 	"sort"
 )
 
-type LocationTransformer struct {
-	Stations []marta_schemas.StationLocation
-}
-
-func NewLocationTransformer() LocationTransformer {
-	return LocationTransformer{parseStationData(transformers_data.GeoLocations)}
-}
-
-func (lt LocationTransformer) GetNearestLocations(latitude, longitude float64) (sortedStationLocations []marta_schemas.StationLocation) {
-	for _, locationStation := range lt.Stations {
-		stationLat, stationLong := geohash.Decode(locationStation.Location)
-		locationStation.Distance = calculateDistance(latitude, longitude, stationLat, stationLong)
-		sortedStationLocations = append(sortedStationLocations, locationStation)
+func SortStationsByDistance(latitude, longitude float64, stations []models.Station) (sortedStations []models.Station) {
+	for _, locationStation := range stations {
+		stationLat, stationLong := geohash.Decode(locationStation.Detail.Location)
+		locationStation.Detail.Distance = calculateDistance(latitude, longitude, stationLat, stationLong)
+		sortedStations = append(sortedStations, locationStation)
 	}
 
-	sort.Slice(sortedStationLocations[:], func(i, j int) bool {
-		return sortedStationLocations[i].Distance < sortedStationLocations[j].Distance
+	sort.Slice(sortedStations[:], func(i, j int) bool {
+		return sortedStations[i].Detail.Distance < sortedStations[j].Detail.Distance
 	})
 
 	return
-}
-
-func parseStationData(stationData []transformers_data.GeoLocation) (stationLocations []marta_schemas.StationLocation) {
-	for i, _ := range stationData {
-		station := marta_schemas.StationLocation{
-			StationName: stationData[i].Name,
-			Location:    stationData[i].Location,
-			Distance:    0,
-		}
-		stationLocations = append(stationLocations, station)
-	}
-
-	return
-}
-
-func parseCsv(fileName string) ([][]string, error) {
-
-	f, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal("Unable to read input file "+fileName, err)
-	}
-	defer f.Close()
-
-	csvReader := csv.NewReader(f)
-	records, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal("Unable to parse file as CSV for "+fileName, err)
-	}
-
-	return records, err
 }
 
 func hsin(theta float64) float64 {
