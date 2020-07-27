@@ -43,6 +43,9 @@ type App struct {
 // @in header
 // @name Authorization
 func (app *App) Start(bootstrap bool, customRouter func()) {
+
+	log.SetFormatter(&log.JSONFormatter{})
+
 	if app.DB == nil {
 		dbURI := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
 			app.Options.DbHost,
