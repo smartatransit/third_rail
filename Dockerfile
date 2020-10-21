@@ -13,5 +13,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -installsuffix
 FROM alpine:3.11
 RUN apk --no-cache add ca-certificates
 
-COPY --from=builder /src/third_rail /bin/third_rail
-CMD ["/bin/third_rail"]
+COPY --from=builder /src/main /bin/main
+CMD ["/bin/main"]
