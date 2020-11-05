@@ -15,8 +15,11 @@ func main() {
 	}
 
 	app := &api.App{Options: options}
+
 	if err = app.Initialize(); err != nil {
 		log.Fatal(err)
 	}
-	app.Start(nil)
+	if err = app.InitializeSchema(); err != nil {
+		log.Fatal(err)
+	}
 }

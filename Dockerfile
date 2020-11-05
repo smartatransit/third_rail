@@ -9,9 +9,11 @@ COPY data/ data/
 COPY docs/ docs/
 COPY cmd/ cmd/
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -installsuffix cgo cmd/third_rail/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -installsuffix cgo cmd/dbinit/main.go
 
 FROM alpine:3.11
 RUN apk --no-cache add ca-certificates
 
 COPY --from=builder /src/main /bin/main
+COPY --from=builder /src/dbinit /bin/dbinit
 CMD ["/bin/main"]
