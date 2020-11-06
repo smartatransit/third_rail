@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -16,7 +18,6 @@ import (
 	"github.com/smartatransit/third_rail/pkg/models"
 	"github.com/smartatransit/third_rail/pkg/seed"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"net/http"
 )
 
 type App struct {
@@ -42,32 +43,11 @@ type App struct {
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-func (app *App) Start(bootstrap bool, customRouter func()) {
-
-	log.SetFormatter(&log.JSONFormatter{})
-
-	if app.DB == nil {
-		dbURI := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-			app.Options.DbHost,
-			app.Options.DbPort,
-			app.Options.DbUsername,
-			app.Options.DbName,
-			app.Options.DbPassword)
-
-		var err error
-		app.DB, err = gorm.Open("postgres", dbURI)
-
-		if err != nil {
-			log.Fatalf("Could not connect database: %v", err)
-		}
-	}
-
-	if bootstrap {
-		app.DB = models.DBMigrate(app.DB)
-		seed.Seed(app.DB)
-	}
-
-	//defer app.DB.Close()
+func (app *App) Start(customRouter func()) {
+	// We do this here rather than in Initialize so that it only happens
+	// when we start the app. Forcing preloading while seeding or migrating
+	// could slow things down.
+	app.DB.Set("gorm:auto_preload", true)
 
 	if customRouter != nil {
 		customRouter()
@@ -93,6 +73,42 @@ func (app *App) Start(bootstrap bool, customRouter func()) {
 
 		app.serve()
 	}
+}
+
+func (app *App) Initialize() error {
+	log.SetFormatter(&log.JSONFormatter{})
+
+	if app.DB == nil {
+		var err error
+		app.DB, err = gorm.Open("postgres", app.Options.DBConnectionString)
+		if err != nil {
+			return fmt.Errorf("Could not connect database: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func (app *App) InitializeSchema(quiet ...bool) error {
+	q := len(quiet) > 0 && quiet[0]
+
+	app.DB.LogMode(!q)
+	lg := log.New()
+	if q {
+		lg.SetLevel(log.ErrorLevel)
+	} else {
+		lg.SetLevel(log.InfoLevel)
+	}
+
+	if err := models.DBMigrate(app.DB, lg); err != nil {
+		return fmt.Errorf("failed migrating database: %w", err)
+	}
+	if err := seed.Seed(app.DB, lg); err != nil {
+		return fmt.Errorf("failed seeding database: %w", err)
+	}
+
+	lg.Info("Success!")
+	return nil
 }
 
 func (app *App) mountLiveRoutes() {

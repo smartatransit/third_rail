@@ -109,7 +109,15 @@ func setUpStaticAPI(t *testing.T) (app *App) {
 
 	app = &App{DB: db}
 
-	app.Start(true, func() {
+	err = app.Initialize()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = app.InitializeSchema()
+	if err != nil {
+		t.Fatal(err)
+	}
+	app.Start(func() {
 		app.Router = mux.NewRouter()
 		app.MountStaticRoutes()
 	})
