@@ -90,7 +90,15 @@ func setUpSmartAPI(t *testing.T, twitterClient clients.TwitterClient) (app *App)
 
 	app = &App{DB: db, TwitterClient: twitterClient}
 
-	app.Start(true, func() {
+	err = app.Initialize()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = app.InitializeSchema()
+	if err != nil {
+		t.Fatal(err)
+	}
+	app.Start(func() {
 		app.Router = mux.NewRouter()
 		app.mountSmartRoutes()
 	})

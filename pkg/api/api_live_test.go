@@ -171,7 +171,7 @@ func setUpLiveAPI(t *testing.T, martaClient clients.MartaClient) (app *App) {
 
 	app = &App{DB: db, MartaClient: martaClient}
 
-	app.Start(true, func() {
+	app.Start(func() {
 		app.Router = mux.NewRouter()
 		app.mountLiveRoutes()
 	})
