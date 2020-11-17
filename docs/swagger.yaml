@@ -1,120 +1,117 @@
 definitions:
-  controllers.alertResponse:
+  controllers.AlertResponse:
     properties:
       data:
         $ref: '#/definitions/marta_schemas.Alerts'
-        type: object
     type: object
-  controllers.directionsData:
-    properties:
-      directions:
-        items:
-          type: string
-        type: array
-    type: object
-  controllers.directionsResponse:
+  controllers.DirectionsResponse:
     properties:
       data:
         $ref: '#/definitions/controllers.directionsData'
-        type: object
     type: object
-  controllers.linesData:
-    properties:
-      lines:
-        items:
-          type: string
-        type: array
-    type: object
-  controllers.linesResponse:
+  controllers.LinesResponse:
     properties:
       data:
         $ref: '#/definitions/controllers.linesData'
-        type: object
     type: object
-  controllers.parkingData:
-    properties:
-      station:
-        $ref: '#/definitions/marta_schemas.Station'
-        type: object
-      status:
-        type: string
-    type: object
-  controllers.parkingResponse:
+  controllers.ParkingResponse:
     properties:
       data:
         items:
           $ref: '#/definitions/controllers.parkingData'
         type: array
     type: object
-  controllers.response:
+  controllers.Response:
     properties:
       data:
         items:
           $ref: '#/definitions/controllers.responseData'
         type: array
     type: object
+  controllers.StationsLocationResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Station'
+        type: array
+    type: object
+  controllers.StationsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controllers.stationsData'
+    type: object
+  controllers.directionsData:
+    properties:
+      directions:
+        items:
+          $ref: '#/definitions/models.Direction'
+        type: array
+    type: object
+  controllers.linesData:
+    properties:
+      lines:
+        items:
+          $ref: '#/definitions/models.Line'
+        type: array
+    type: object
+  controllers.parkingData:
+    properties:
+      station:
+        $ref: '#/definitions/marta_schemas.Station'
+      status:
+        type: string
+    type: object
   controllers.responseData:
     properties:
       schedule:
         $ref: '#/definitions/marta_schemas.Schedule'
-        type: object
       station:
         $ref: '#/definitions/marta_schemas.Station'
-        type: object
     type: object
   controllers.stationsData:
     properties:
       stations:
         items:
-          type: string
+          $ref: '#/definitions/models.Station'
         type: array
-    type: object
-  controllers.stationsLocationResponse:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/marta_schemas.StationLocation'
-        type: array
-    type: object
-  controllers.stationsResponse:
-    properties:
-      data:
-        $ref: '#/definitions/controllers.stationsData'
-        type: object
     type: object
   marta_schemas.Alerts:
     properties:
-      bus:
+      Bus:
         items:
-          properties:
-            desc:
-              type: string
-            expires:
-              type: string
-            id:
-              type: string
-            text:
-              type: string
-            title:
-              type: string
-          type: object
+          $ref: '#/definitions/marta_schemas.BusAlert'
         type: array
-      rail:
+      Rail:
         items:
-          properties:
-            desc:
-              type: string
-            expires:
-              type: string
-            id:
-              type: string
-            text:
-              type: string
-            title:
-              type: string
-          type: object
+          $ref: '#/definitions/marta_schemas.RailAlert'
         type: array
       text:
+        type: string
+    type: object
+  marta_schemas.BusAlert:
+    properties:
+      desc:
+        type: string
+      expires:
+        type: string
+      id:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+    type: object
+  marta_schemas.RailAlert:
+    properties:
+      desc:
+        type: string
+      expires:
+        type: string
+      id:
+        type: string
+      text:
+        type: string
+      title:
         type: string
     type: object
   marta_schemas.Schedule:
@@ -143,16 +140,144 @@ definitions:
       name:
         type: string
     type: object
-  marta_schemas.StationLocation:
+  models.Alias:
     properties:
+      alias:
+        type: string
+      description:
+        type: string
+      namedElementType:
+        type: string
+    type: object
+  models.Direction:
+    properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.Alias'
+        type: array
+      feedback:
+        items:
+          $ref: '#/definitions/models.Feedback'
+        type: array
+      lines:
+        items:
+          $ref: '#/definitions/models.Line'
+        type: array
+      name:
+        type: string
+    type: object
+  models.Feedback:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      directionID:
+        type: integer
+      expiresAt:
+        type: string
+      id:
+        type: integer
+      lineID:
+        type: integer
+      source:
+        $ref: '#/definitions/models.FeedbackSource'
+      sourceID:
+        type: integer
+      stationID:
+        type: integer
+      thumbsDown:
+        type: integer
+      thumbsUp:
+        type: integer
+      type:
+        $ref: '#/definitions/models.FeedbackType'
+      typeID:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.FeedbackSource:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      sourceID:
+        type: string
+      sourceType:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.FeedbackType:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  models.Line:
+    properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.Alias'
+        type: array
+      directions:
+        items:
+          $ref: '#/definitions/models.Direction'
+        type: array
+      feedback:
+        items:
+          $ref: '#/definitions/models.Feedback'
+        type: array
+      name:
+        type: string
+      stations:
+        items:
+          $ref: '#/definitions/models.Station'
+        type: array
+    type: object
+  models.Station:
+    properties:
+      aliases:
+        items:
+          $ref: '#/definitions/models.Alias'
+        type: array
+      detail:
+        $ref: '#/definitions/models.StationDetail'
+      feedback:
+        items:
+          $ref: '#/definitions/models.Feedback'
+        type: array
+      id:
+        type: integer
+      lines:
+        items:
+          $ref: '#/definitions/models.Line'
+        type: array
+      name:
+        type: string
+    type: object
+  models.StationDetail:
+    properties:
+      description:
+        type: string
       distance:
         type: number
       location:
         type: string
-      station_name:
-        type: string
     type: object
-host: third-rail.services.ataper.net
 info:
   contact:
     email: smartatransit@gmail.com
@@ -173,7 +298,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.alertResponse'
+            $ref: '#/definitions/controllers.AlertResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Alerts from various MARTA sources
@@ -192,7 +317,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.response'
+            $ref: '#/definitions/controllers.Response'
       security:
       - ApiKeyAuth: []
       summary: Get Schedule By Line
@@ -211,7 +336,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.response'
+            $ref: '#/definitions/controllers.Response'
       security:
       - ApiKeyAuth: []
       summary: Get Schedule By Station
@@ -224,7 +349,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.parkingResponse'
+            $ref: '#/definitions/controllers.ParkingResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Parking Information
@@ -237,7 +362,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.directionsResponse'
+            $ref: '#/definitions/controllers.DirectionsResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Directions
@@ -250,7 +375,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.linesResponse'
+            $ref: '#/definitions/controllers.LinesResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Lines
@@ -274,8 +399,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.stationsLocationResponse'
-        "400": {}
+            $ref: '#/definitions/controllers.StationsLocationResponse'
+        "400":
+          description: ""
       security:
       - ApiKeyAuth: []
       summary: Get nearest station given a lat and lng
@@ -288,7 +414,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.response'
+            $ref: '#/definitions/controllers.Response'
       security:
       - ApiKeyAuth: []
       summary: Get Static Schedule By Station
@@ -301,12 +427,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controllers.stationsResponse'
+            $ref: '#/definitions/controllers.StationsResponse'
       security:
       - ApiKeyAuth: []
       summary: Get Stations
 securityDefinitions:
   ApiKeyAuth:
+    authorizationUrl: ""
     in: header
     name: Authorization
     type: apiKey
