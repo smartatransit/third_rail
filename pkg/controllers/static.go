@@ -17,7 +17,7 @@ type StaticController struct {
 // @Summary Get Static Schedule By Station
 // @Description Get MARTA's scheduled times for arrival for all stations
 // @Produce  json
-// @Success 200 {object} response
+// @Success 200 {object} Response
 // @Router /static/schedule/station [get]
 // @Security ApiKeyAuth
 func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWriter, req *http.Request) {
@@ -39,7 +39,7 @@ func (controller StaticController) GetStaticScheduleByStation(w http.ResponseWri
 // @Summary Get Lines
 // @Description Get all available lines
 // @Produce  json
-// @Success 200 {object} linesResponse
+// @Success 200 {object} LinesResponse
 // @Router /static/lines [get]
 // @Security ApiKeyAuth
 func (controller StaticController) GetLines(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
@@ -56,7 +56,7 @@ func (controller StaticController) GetLines(db *gorm.DB, w http.ResponseWriter, 
 // @Summary Get Directions
 // @Description Get all available directions
 // @Produce  json
-// @Success 200 {object} directionsResponse
+// @Success 200 {object} DirectionsResponse
 // @Router /static/directions [get]
 // @Security ApiKeyAuth
 func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
@@ -74,7 +74,7 @@ func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWri
 // @Summary Get Stations
 // @Description Get all available stations
 // @Produce  json
-// @Success 200 {object} stationsResponse
+// @Success 200 {object} StationsResponse
 // @Router /static/stations [get]
 // @Security ApiKeyAuth
 func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
@@ -96,7 +96,7 @@ func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWrite
 // @Param latitutde query int true "Latitude"
 // @Param longitude query int true "Longitude"
 // @Failure 400
-// @Success 200 {object} stationsLocationResponse
+// @Success 200 {object} StationsLocationResponse
 // @Router /static/location [get]
 // @Security ApiKeyAuth
 func (controller StaticController) GetLocations(db *gorm.DB, w http.ResponseWriter, req *http.Request) {

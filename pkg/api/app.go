@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	_ "github.com/smartatransit/third_rail/docs"
+	"github.com/smartatransit/third_rail/docs"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
 	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"
@@ -38,8 +38,6 @@ type App struct {
 // @license.name GNU General Public License v3.0
 // @license.url https://github.com/smartatransit/third_rail/blob/master/LICENSE
 
-// @host third-rail.services.ataper.net
-
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -48,6 +46,10 @@ func (app *App) Start(customRouter func()) {
 	// when we start the app. Forcing preloading while seeding or migrating
 	// could slow things down.
 	app.DB.Set("gorm:auto_preload", true)
+
+	// Most of the Swagger config lives in hard-coded comments, but since
+	// the hostname is variable, we configure it at runtime:
+	docs.SwaggerInfo.Host = app.Options.Servicedomain
 
 	if customRouter != nil {
 		customRouter()

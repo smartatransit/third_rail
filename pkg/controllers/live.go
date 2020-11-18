@@ -21,7 +21,7 @@ type LiveController struct {
 // @Description  Given a line, return the current live schedule
 // @Param line path string true "RED, GOLD, BLUE, GREEN"
 // @Produce  json
-// @Success 200 {object} response
+// @Success 200 {object} Response
 // @Router /live/schedule/line/{line} [get]
 // @Security ApiKeyAuth
 func (controller LiveController) GetScheduleByLine(w http.ResponseWriter, req *http.Request) {
@@ -50,7 +50,7 @@ func (controller LiveController) GetScheduleByLine(w http.ResponseWriter, req *h
 // @Description  Given a station, return the current live schedule
 // @Param station path string true "TODO: Enter all stations as enum?"
 // @Produce  json
-// @Success 200 {object} response
+// @Success 200 {object} Response
 // @Router /live/schedule/station/{station} [get]
 // @Security ApiKeyAuth
 func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req *http.Request) {
@@ -80,7 +80,7 @@ func (controller LiveController) GetScheduleByStation(w http.ResponseWriter, req
 // @Summary Get Alerts from various MARTA sources
 // @Description MARTA alerts sourced from their official twitter account
 // @Produce  json
-// @Success 200 {object} alertResponse
+// @Success 200 {object} AlertResponse
 // @Router /live/alerts [get]
 // @Security ApiKeyAuth
 func (controller LiveController) GetAlerts(w http.ResponseWriter, req *http.Request) {

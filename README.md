@@ -15,6 +15,22 @@ with analysis of historic patterns, static schedule data, and external sources l
 Goals? Oh we've got goals - check 'em out in the
 [overview document](https://github.com/smartatransit/infohub/blob/master/vision/overview.md).
 
+### Generating swagger docs
+
+When making changes to API functionality and _especially_ when changing the signature of API calls, you should update the corresponding Swagger comments as well, and then regenerate the Swagger docs.
+
+To do this, first install the Swaggo CLI:
+
+```
+go get -u github.com/swaggo/swag/cmd/swag
+```
+
+Then run:
+
+```
+go generate .
+```
+
 ### TODO
 
 - [x] Find rail schedule by line

@@ -8,4 +8,5 @@ type Options struct {
 	MartaCacheTTL       int    `long:"marta-cache-ttl" env:"MARTA_CACHE_TTL" default:"15" description:"how long we keep the marta responses" required:"true"`
 	DBConnectionString  string `long:"db-connection-string" env:"DB_CONNECTION_STRING"`
 	AdminAPIKey         string `long:"admin-api-key" env:"ADMIN_API_KEY" description:"admin api key"`
+	Servicedomain       string `long:"service-domain" env:"SERVICE_DOMAIN" description:"the domain at which the service is served" default:"third-rail.services.smartatransit.com"`
 }

@@ -14,7 +14,7 @@ type RiderController struct{}
 // @Summary Get Alerts from various MARTA sources
 // @Description MARTA alerts sourced from their official twitter account
 // @Produce  json
-// @Success 200 {object} alertResponse
+// @Success 200 {object} AlertResponse
 // @Router /live/alerts [get]
 // @Security ApiKeyAuth
 func (controller RiderController) GetRiderAlerts(db *gorm.DB, w http.ResponseWriter, req *http.Request) {

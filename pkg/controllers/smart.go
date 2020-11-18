@@ -63,7 +63,7 @@ func (controller SmartController) GetStationDetails(db *gorm.DB, w http.Response
 // @Summary Get Parking Information
 // @Description  Get available parking information as informed by twitter
 // @Produce  json
-// @Success 200 {object} parkingResponse
+// @Success 200 {object} ParkingResponse
 // @Router /smart/parking [get]
 // @Security ApiKeyAuth
 func (controller SmartController) GetParkingStatus(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
