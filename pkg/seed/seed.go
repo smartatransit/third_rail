@@ -42,7 +42,7 @@ func Seed(db *gorm.DB, log *log.Logger) error {
 	//Lines
 	log.Info("Creating Lines")
 
-	gold, err := InsertLine(db, "Gold", []string{"Gold"}, []models.Direction{northbound, southbound})
+	gold, err := InsertLine(db, "Gold", nil, []models.Direction{northbound, southbound})
 	if err != nil {
 		return err
 	}
@@ -246,14 +246,10 @@ func InsertDirection(db *gorm.DB, name string, aliases []string) (models.Directi
 	var err error
 	direction := models.Direction{Name: name}
 
-	if aliases != nil {
-		var namedAliases []models.Alias
+	direction.Aliases = []models.Alias{{Alias: name}}
 
-		for _, a := range aliases {
-			namedAliases = append(namedAliases, models.Alias{Alias: a})
-		}
-
-		direction.Aliases = namedAliases
+	for _, a := range aliases {
+		direction.Aliases = append(direction.Aliases, models.Alias{Alias: a})
 	}
 
 	err = db.Save(&direction).Error
@@ -268,14 +264,10 @@ func InsertLine(db *gorm.DB, name string, aliases []string, directions []models.
 	var err error
 	line := models.Line{Name: name}
 
-	if aliases != nil {
-		var namedAliases []models.Alias
+	line.Aliases = []models.Alias{{Alias: name}}
 
-		for _, a := range aliases {
-			namedAliases = append(namedAliases, models.Alias{Alias: a})
-		}
-
-		line.Aliases = namedAliases
+	for _, a := range aliases {
+		line.Aliases = append(line.Aliases, models.Alias{Alias: a})
 	}
 
 	err = db.Save(&line).Error
@@ -292,24 +284,12 @@ func InsertLine(db *gorm.DB, name string, aliases []string, directions []models.
 
 func InsertStation(db *gorm.DB, name, location, description string, aliases []string, lines []models.Line) (models.Station, error) {
 	var err error
-	var station models.Station
+	station := models.Station{Name:name}
 
-	if aliases != nil {
-		var namedAliases []models.Alias
+	station.Aliases = []models.Alias{{Alias: name}}
 
-		for _, a := range aliases {
-			namedAliases = append(namedAliases, models.Alias{Alias: a})
-		}
-
-		station = models.Station{
-			Name:    name,
-			Aliases: namedAliases,
-		}
-
-	} else {
-		station = models.Station{
-			Name: name,
-		}
+	for _, a := range aliases {
+		station.Aliases = append(station.Aliases, models.Alias{Alias: a})
 	}
 
 	err = db.Save(&station).Error
