@@ -2,26 +2,33 @@ package controllers
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+	"time"
+
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	log "github.com/sirupsen/logrus"
+	"github.com/smartatransit/scrapedumper/pkg/postgres"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/models"
-	"net/http"
-	"strconv"
 )
+
+type MartaMirror interface {
+	GetLatestEstimates(stationID uint) (res []postgres.LastestEstimate, err error)
+}
 
 type SmartController struct {
 	MartaClient   clients.MartaClient
 	TwitterClient clients.TwitterClient
+
+	SDClient MartaMirror
 }
 
 func (controller SmartController) GetStationDetails(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	v := mux.Vars(req)
-
 	stationId, idErr := strconv.Atoi(v["id"])
 	if idErr != nil {
 		w.WriteHeader(http.StatusUnprocessableEntity)
@@ -29,24 +36,20 @@ func (controller SmartController) GetStationDetails(db *gorm.DB, w http.Response
 	}
 
 	var station models.Station
-	db.Preload("Detail").Preload("Lines").Preload("Aliases").First(&station, stationId)
+	if err := db.First(&station, stationId).Error; err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	scheduleEvents, realTimeDetails, seErr := models.GetScheduleEventsByStationRealTime(stationId, db)
-
-	if seErr != nil {
-		log.Error(seErr)
+	sdEstimates, err := controller.SDClient.GetLatestEstimates(uint(stationId))
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	var schedules []ScheduleDetail
-
-	for index, event := range scheduleEvents {
-		schedules = append(schedules, ScheduleDetail{
-			Event:    event,
-			RealTime: &realTimeDetails[index],
-			Static:   nil,
-		})
+	for _, estimate := range sdEstimates {
+		schedules = append(schedules, convertSDEstimate(estimate))
 	}
 
 	response := StationDetailsResponse{
@@ -57,6 +60,25 @@ func (controller SmartController) GetStationDetails(db *gorm.DB, w http.Response
 	}
 
 	json.NewEncoder(w).Encode(response)
+}
+
+func convertSDEstimate(estimate postgres.LastestEstimate) ScheduleDetail {
+	return ScheduleDetail{
+		Event: models.ScheduleEvent{
+			Destination: models.Station{
+				Name: estimate.Destination,
+			},
+			NextStation: models.Station{
+				ID:   *estimate.StationID,
+				Name: estimate.Station,
+			},
+			Direction: models.Direction{
+				ID:   *estimate.DirectionID,
+				Name: estimate.Direction,
+			},
+			NextArrival: time.Time(estimate.NextArrival),
+		},
+	}
 }
 
 // GetParkingStatus godoc
