@@ -5,9 +5,11 @@ github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 github.com/PuerkitoBio/urlesc
 # github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+## explicit
 github.com/alecthomas/template
 github.com/alecthomas/template/parse
 # github.com/aws/aws-sdk-go v1.23.19
+## explicit
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/awserr
 github.com/aws/aws-sdk-go/aws/awsutil
@@ -30,32 +32,46 @@ github.com/aws/aws-sdk-go/private/protocol/rest
 github.com/aws/aws-sdk-go/service/dynamodb
 github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute
 # github.com/cenkalti/backoff v2.2.1+incompatible
+## explicit
 github.com/cenkalti/backoff
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
+# github.com/denisenkom/go-mssqldb v0.0.0-20200428022330-06a60b6afbbc
+## explicit
 # github.com/dghubble/go-twitter v0.0.0-20190719072343-39e5462e111f
+## explicit
 github.com/dghubble/go-twitter/twitter
 # github.com/dghubble/sling v1.3.0
 github.com/dghubble/sling
+# github.com/go-chi/chi v4.1.1+incompatible
+## explicit
 # github.com/go-openapi/jsonpointer v0.19.3
 github.com/go-openapi/jsonpointer
 # github.com/go-openapi/jsonreference v0.19.3
 github.com/go-openapi/jsonreference
 # github.com/go-openapi/spec v0.19.7
+## explicit
 github.com/go-openapi/spec
 # github.com/go-openapi/swag v0.19.9
+## explicit
 github.com/go-openapi/swag
+# github.com/go-sql-driver/mysql v1.5.0
+## explicit
 # github.com/golang/protobuf v1.4.2
 github.com/golang/protobuf/proto
 # github.com/google/go-querystring v1.0.0
 github.com/google/go-querystring/query
 # github.com/gorilla/handlers v1.4.2
+## explicit
 github.com/gorilla/handlers
 # github.com/gorilla/mux v1.7.4
+## explicit
 github.com/gorilla/mux
 # github.com/jessevdk/go-flags v1.4.0
+## explicit
 github.com/jessevdk/go-flags
 # github.com/jinzhu/gorm v1.9.12
+## explicit
 github.com/jinzhu/gorm
 github.com/jinzhu/gorm/dialects/postgres
 github.com/jinzhu/gorm/dialects/sqlite
@@ -64,45 +80,60 @@ github.com/jinzhu/inflection
 # github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
 github.com/jmespath/go-jmespath
 # github.com/karlseguin/ccache v2.0.3+incompatible
+## explicit
 github.com/karlseguin/ccache
+# github.com/karlseguin/expect v1.0.7
+## explicit
 # github.com/konsorten/go-windows-terminal-sequences v1.0.3
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/lib/pq v1.5.0
+## explicit
 github.com/lib/pq
 github.com/lib/pq/hstore
 github.com/lib/pq/oid
 github.com/lib/pq/scram
 # github.com/mailru/easyjson v0.7.1
+## explicit
 github.com/mailru/easyjson
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-sqlite3 v2.0.3+incompatible
+## explicit
 github.com/mattn/go-sqlite3
 # github.com/mmcloughlin/geohash v0.9.0
+## explicit
 github.com/mmcloughlin/geohash
 # github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
 # github.com/sahilm/fuzzy v0.1.0
+## explicit
 github.com/sahilm/fuzzy
 # github.com/sirupsen/logrus v1.6.0
+## explicit
 github.com/sirupsen/logrus
 # github.com/smartatransit/gomarta v1.0.0
+## explicit
 github.com/smartatransit/gomarta
 # github.com/smartatransit/scrapedumper v0.0.0-20210116133309-2a87d1b2939b
+## explicit
 github.com/smartatransit/scrapedumper/pkg/martaapi
 github.com/smartatransit/scrapedumper/pkg/postgres
 # github.com/stretchr/testify v1.6.1
+## explicit
 github.com/stretchr/testify/assert
 # github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 github.com/swaggo/files
 # github.com/swaggo/http-swagger v0.0.0-20200308142732-58ac5e232fba
+## explicit
 github.com/swaggo/http-swagger
 # github.com/swaggo/swag v1.6.5
+## explicit
 github.com/swaggo/swag
 # github.com/thoas/go-funk v0.6.0
+## explicit
 github.com/thoas/go-funk
 # go.uber.org/atomic v1.6.0
 go.uber.org/atomic
@@ -115,6 +146,8 @@ go.uber.org/zap/internal/bufferpool
 go.uber.org/zap/internal/color
 go.uber.org/zap/internal/exit
 go.uber.org/zap/zapcore
+# golang.org/x/lint v0.0.0-20200130185559-910be7a94367
+## explicit
 # golang.org/x/net v0.0.0-20200822124328-c89045814202
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
@@ -122,6 +155,7 @@ golang.org/x/net/idna
 golang.org/x/net/webdav
 golang.org/x/net/webdav/internal/xml
 # golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+## explicit
 golang.org/x/oauth2
 golang.org/x/oauth2/clientcredentials
 golang.org/x/oauth2/internal
@@ -140,6 +174,7 @@ golang.org/x/tools/go/buildutil
 golang.org/x/tools/go/internal/cgo
 golang.org/x/tools/go/loader
 # google.golang.org/appengine v1.6.6
+## explicit
 google.golang.org/appengine/internal
 google.golang.org/appengine/internal/base
 google.golang.org/appengine/internal/datastore
