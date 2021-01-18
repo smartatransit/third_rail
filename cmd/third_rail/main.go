@@ -4,8 +4,6 @@ import (
 	"github.com/jessevdk/go-flags"
 	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/api"
-
-	_ "time/tzdata"
 )
 
 func main() {
