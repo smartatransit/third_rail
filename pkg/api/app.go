@@ -70,8 +70,10 @@ func (app *App) Start(customRouter func()) {
 		app.mountSwaggerRoutes()
 		app.mountAdminRoutes()
 
-		rr := daemons.RailRunner{MartaClient: app.MartaClient, DB: app.DB}
-		rr.Start()
+		if app.Options.RailRunner {
+			rr := daemons.RailRunner{MartaClient: app.MartaClient, DB: app.DB}
+			rr.Start()
+		}
 
 		app.serve()
 	}

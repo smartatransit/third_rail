@@ -57,7 +57,7 @@ func FindDirectionByName(name string, db *gorm.DB) (Direction, error) {
 
 	if len(results) > 0 {
 		for _, match := range results {
-			log.Infof("Direction Name: %s, Match: %s, Score: %d", name, aliases[match.Index].Alias, match.Score)
+			log.Debugf("Direction Name: %s, Match: %s, Score: %d", name, aliases[match.Index].Alias, match.Score)
 			matches = append(matches, match)
 		}
 
