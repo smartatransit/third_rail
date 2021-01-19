@@ -32,7 +32,7 @@ type SmartController struct {
 // @Param id path string true "Unique id of the station"
 // @Produce json
 // @Success 200 {object} Response
-// @Router /smarta/station/{id} [get]
+// @Router /smart/station/{id} [get]
 // @Security ApiKeyAuth
 func (controller SmartController) GetStationDetails(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
