@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 	"github.com/smartatransit/scrapedumper/pkg/postgres"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/models"
@@ -37,12 +39,14 @@ func (controller SmartController) GetStationDetails(db *gorm.DB, w http.Response
 
 	var station models.Station
 	if err := db.First(&station, stationId).Error; err != nil {
+		logrus.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	sdEstimates, err := controller.SDClient.GetLatestEstimates(uint(stationId))
 	if err != nil {
+		logrus.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

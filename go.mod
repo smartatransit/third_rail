@@ -14,7 +14,6 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.4
-	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/karlseguin/ccache v2.0.3+incompatible
@@ -22,19 +21,18 @@ require (
 	github.com/lib/pq v1.9.0 // indirect
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
-	github.com/maxbrunsfeld/counterfeiter/v6 v6.3.0 // indirect
 	github.com/mmcloughlin/geohash v0.9.0
+	github.com/onsi/gomega v1.10.3 // indirect
 	github.com/sahilm/fuzzy v0.1.0
 	github.com/sirupsen/logrus v1.6.0
 	github.com/smartatransit/gomarta v1.0.0
-	github.com/smartatransit/scrapedumper v0.0.0-20210117033100-015d3762f980
-	github.com/spf13/afero v1.5.1 // indirect
+	github.com/smartatransit/scrapedumper v0.0.0-20210119010631-287eb56dc233
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/http-swagger v0.0.0-20200308142732-58ac5e232fba
 	github.com/swaggo/swag v1.6.5
 	github.com/thoas/go-funk v0.6.0
 	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/zap v1.16.0 // indirect
+	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/lint v0.0.0-20200130185559-910be7a94367 // indirect
 	golang.org/x/mod v0.4.1 // indirect
@@ -42,6 +40,5 @@ require (
 	golang.org/x/text v0.3.5 // indirect
 	golang.org/x/tools v0.0.0-20210115202250-e0d201561e39 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
-	gorm.io/driver/postgres v1.0.6 // indirect
-	gorm.io/gorm v1.20.11 // indirect
+	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b // indirect
 )

@@ -9,6 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 	"github.com/smartatransit/scrapedumper/pkg/postgres"
+	"github.com/smartatransit/third_rail/docs"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
 	"github.com/smartatransit/third_rail/pkg/clients/twitter_client"

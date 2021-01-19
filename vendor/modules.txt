@@ -70,8 +70,6 @@ github.com/gorilla/handlers
 # github.com/gorilla/mux v1.7.4
 ## explicit
 github.com/gorilla/mux
-# github.com/jackc/pgproto3/v2 v2.0.7
-## explicit
 # github.com/jessevdk/go-flags v1.4.0
 ## explicit
 github.com/jessevdk/go-flags
@@ -106,11 +104,11 @@ github.com/mailru/easyjson/jwriter
 # github.com/mattn/go-sqlite3 v2.0.3+incompatible
 ## explicit
 github.com/mattn/go-sqlite3
-# github.com/maxbrunsfeld/counterfeiter/v6 v6.3.0
-## explicit
 # github.com/mmcloughlin/geohash v0.9.0
 ## explicit
 github.com/mmcloughlin/geohash
+# github.com/onsi/gomega v1.10.3
+## explicit
 # github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
@@ -124,12 +122,10 @@ github.com/sirupsen/logrus
 # github.com/smartatransit/gomarta v1.0.0
 ## explicit
 github.com/smartatransit/gomarta
-# github.com/smartatransit/scrapedumper v0.0.0-20210117033100-015d3762f980
+# github.com/smartatransit/scrapedumper v0.0.0-20210119010631-287eb56dc233
 ## explicit
 github.com/smartatransit/scrapedumper/pkg/martaapi
 github.com/smartatransit/scrapedumper/pkg/postgres
-# github.com/spf13/afero v1.5.1
-## explicit
 # github.com/stretchr/testify v1.6.1
 ## explicit
 github.com/stretchr/testify/assert
@@ -227,11 +223,9 @@ google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
+# gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b
+## explicit
 # gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 gopkg.in/yaml.v3
-# gorm.io/driver/postgres v1.0.6
-## explicit
-# gorm.io/gorm v1.20.11
-## explicit
