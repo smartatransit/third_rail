@@ -26,6 +26,14 @@ type SmartController struct {
 	SDClient MartaMirror
 }
 
+// GetScheduleByStation godoc
+// @Summary Get Schedule By Station
+// @Description  Given a station ID, return the latest estimates for trains
+// @Param id path string true "Unique id of the station"
+// @Produce json
+// @Success 200 {object} Response
+// @Router /smarta/station/{id} [get]
+// @Security ApiKeyAuth
 func (controller SmartController) GetStationDetails(db *gorm.DB, w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
