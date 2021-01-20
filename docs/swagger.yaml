@@ -353,7 +353,7 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get Parking Information
-  /smarta/station/{id}:
+  /smart/station/{id}:
     get:
       description: Given a station ID, return the latest estimates for trains
       parameters:

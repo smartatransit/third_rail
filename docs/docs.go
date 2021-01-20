@@ -137,7 +137,7 @@ var doc = `{
                 }
             }
         },
-        "/smarta/station/{id}": {
+        "/smart/station/{id}": {
             "get": {
                 "security": [
                     {
