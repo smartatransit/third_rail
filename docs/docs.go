@@ -137,6 +137,37 @@ var doc = `{
                 }
             }
         },
+        "/smart/station/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Given a station ID, return the latest estimates for trains",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Schedule By Station",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Unique id of the station",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/static/directions": {
             "get": {
                 "security": [

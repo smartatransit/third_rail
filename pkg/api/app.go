@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
+	"github.com/smartatransit/scrapedumper/pkg/postgres"
 	"github.com/smartatransit/third_rail/docs"
 	"github.com/smartatransit/third_rail/pkg/clients"
 	"github.com/smartatransit/third_rail/pkg/clients/marta_client"
@@ -18,6 +19,7 @@ import (
 	"github.com/smartatransit/third_rail/pkg/models"
 	"github.com/smartatransit/third_rail/pkg/seed"
 	httpSwagger "github.com/swaggo/http-swagger"
+	"go.uber.org/zap"
 )
 
 type App struct {
@@ -70,8 +72,10 @@ func (app *App) Start(customRouter func()) {
 		app.mountSwaggerRoutes()
 		app.mountAdminRoutes()
 
-		rr := daemons.RailRunner{MartaClient: app.MartaClient, DB: app.DB}
-		rr.Start()
+		if app.Options.RailRunner {
+			rr := daemons.RailRunner{MartaClient: app.MartaClient, DB: app.DB}
+			rr.Start()
+		}
 
 		app.serve()
 	}
@@ -148,7 +152,11 @@ func (app *App) mountSmartRoutes() {
 		log.Fatal("No Twitter client present - unable to mount Smart routes.")
 	}
 
-	smartController := controllers.SmartController{TwitterClient: app.TwitterClient, MartaClient: app.MartaClient}
+	smartController := controllers.SmartController{
+		TwitterClient: app.TwitterClient,
+		MartaClient:   app.MartaClient,
+		SDClient:      postgres.NewRepository(zap.NewNop(), app.DB.DB()),
+	}
 	smartRouter := app.Router.PathPrefix("/smart").Subrouter()
 	smartRouter.HandleFunc("/parking", func(w http.ResponseWriter, r *http.Request) {
 		smartController.GetParkingStatus(app.DB, w, r)

@@ -353,6 +353,25 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get Parking Information
+  /smart/station/{id}:
+    get:
+      description: Given a station ID, return the latest estimates for trains
+      parameters:
+      - description: Unique id of the station
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Schedule By Station
   /static/directions:
     get:
       description: Get all available directions

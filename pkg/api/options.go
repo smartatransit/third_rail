@@ -9,4 +9,5 @@ type Options struct {
 	DBConnectionString  string `long:"db-connection-string" env:"DB_CONNECTION_STRING"`
 	AdminAPIKey         string `long:"admin-api-key" env:"ADMIN_API_KEY" description:"admin api key"`
 	Servicedomain       string `long:"service-domain" env:"SERVICE_DOMAIN" description:"the domain at which the service is served" default:"third-rail.services.smartatransit.com"`
+	RailRunner          bool   `long:"rail-runner" env:"RAIL_RUNNER" description:"enable the rail runner"`
 }
