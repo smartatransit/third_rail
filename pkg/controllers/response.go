@@ -23,7 +23,7 @@ type linesData struct {
 }
 
 type ScheduleDetail struct {
-	Event    models.ScheduleEvent        `json:"event"`
+	Event    models.ScheduleEvent        `json:"event,omitempty"`
 	RealTime *models.RealTimeEventDetail `json:"real_time_detail,omitempty"`
 	Static   *models.StaticEventDetail   `json:"static_event_detail,omitempty"`
 }
@@ -68,4 +68,11 @@ type ParkingResponse struct {
 
 type AlertResponse struct {
 	Data marta_schemas.Alerts `json:"data"`
+}
+
+type ErrorResponse struct {
+	ErrorID int `json:"id"`
+
+	// A user-readdable message
+	Message string `json:"message"`
 }

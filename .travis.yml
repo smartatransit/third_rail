@@ -18,7 +18,6 @@ notifications:
 
 before_script:
   - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin latest
-#  - golangci-lint run --config=.golangci-lint.yaml # run a bunch of code checkers/linters in parallel
 
 script:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
