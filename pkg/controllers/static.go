@@ -118,11 +118,11 @@ func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWrite
 	json.NewEncoder(w).Encode(response)
 }
 
-// GetLocations implements the
-// @Summary Get nearest station given a lat and long, expressed in
-// @Description Get nearest station given a lat and lng
-// @Produce  json
-// @Param latitutde query number true "Latitude"
+// GetLocations implements the /static/stations/location endpoint
+// @Summary Find the nearest rail stations
+// @Description Get a list of MARTA rail station sorted in descending order of distance from a given point. Specify the longitude and latitude as decimal numbers of degrees, such as "-45.354322" or "86.912341"
+// @Produce json
+// @Param latitude query number true "Latitude"
 // @Param longitude query number true "Longitude"
 // @Failure 400
 // @Success 200 {object} StationsLocationResponse

@@ -398,32 +398,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get Lines
-  /static/location:
-    get:
-      description: Get nearest station given a lat and lng
-      parameters:
-      - description: Latitude
-        in: query
-        name: latitutde
-        required: true
-        type: integer
-      - description: Longitude
-        in: query
-        name: longitude
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/controllers.StationsLocationResponse'
-        "400":
-          description: ""
-      security:
-      - ApiKeyAuth: []
-      summary: Get nearest station given a lat and lng
   /static/schedule/station:
     get:
       description: Get MARTA's scheduled times for arrival for all stations
@@ -450,6 +424,32 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get Stations
+  /static/stations/location:
+    get:
+      description: Get a list of MARTA rail station sorted in descending order of distance from a given point. Specify the longitude and latitude as decimal numbers of degrees, such as "-45.354322" or "86.912341"
+      parameters:
+      - description: Latitude
+        in: query
+        name: latitude
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: longitude
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.StationsLocationResponse'
+        "400":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Find the nearest rail stations
 securityDefinitions:
   ApiKeyAuth:
     authorizationUrl: ""
