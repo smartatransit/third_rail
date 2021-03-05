@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/jinzhu/gorm"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/smartatransit/third_rail/pkg/models"
 
 	"github.com/smartatransit/third_rail/pkg/transformers"
@@ -49,7 +49,7 @@ func (controller StaticController) GetLines(db *gorm.DB, w http.ResponseWriter, 
 
 	var lines []models.Line
 	if err := db.Find(&lines).Error; err != nil {
-		log.Error("Failed to fetch lines:", err.Error())
+		logrus.Error("Failed to fetch lines:", err.Error())
 
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ErrorResponse{
@@ -76,7 +76,7 @@ func (controller StaticController) GetDirections(db *gorm.DB, w http.ResponseWri
 
 	var directions []models.Direction
 	if err := db.Find(&directions).Error; err != nil {
-		log.Error("Failed to fetch directions:", err.Error())
+		logrus.Error("Failed to fetch directions:", err.Error())
 
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ErrorResponse{
@@ -103,7 +103,7 @@ func (controller StaticController) GetStations(db *gorm.DB, w http.ResponseWrite
 
 	var stations []models.Station
 	if err := db.Preload("Lines").Find(&stations).Error; err != nil {
-		log.Error("Failed to fetch stations:", err.Error())
+		logrus.Error("Failed to fetch stations:", err.Error())
 
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ErrorResponse{
@@ -154,7 +154,7 @@ func (controller StaticController) GetLocations(db *gorm.DB, w http.ResponseWrit
 
 	var stations []models.Station
 	if err := db.Preload("Lines").Preload("Detail").Find(&stations).Error; err != nil {
-		log.Error("Failed to fetch stations to sort by location:", err.Error())
+		logrus.Error("Failed to fetch stations to sort by location:", err.Error())
 
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(ErrorResponse{
