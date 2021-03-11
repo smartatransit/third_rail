@@ -195,47 +195,6 @@
                 }
             }
         },
-        "/static/location": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get nearest station given a lat and lng",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get nearest station given a lat and lng",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Latitude",
-                        "name": "latitutde",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Longitude",
-                        "name": "longitude",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controllers.StationsLocationResponse"
-                        }
-                    },
-                    "400": {
-                        "description": ""
-                    }
-                }
-            }
-        },
         "/static/schedule/station": {
             "get": {
                 "security": [
@@ -276,6 +235,47 @@
                         "schema": {
                             "$ref": "#/definitions/controllers.StationsResponse"
                         }
+                    }
+                }
+            }
+        },
+        "/static/stations/location": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of MARTA rail station sorted in descending order of distance from a given point. Specify the longitude and latitude as decimal numbers of degrees, such as \"-45.354322\" or \"86.912341\"",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Find the nearest rail stations",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "Latitude",
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.StationsLocationResponse"
+                        }
+                    },
+                    "400": {
+                        "description": ""
                     }
                 }
             }
